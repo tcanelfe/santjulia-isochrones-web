@@ -1,0 +1,133 @@
+:root {
+  --sj-bg: #f5f7f8;
+  --sj-card: #ffffff;
+  --sj-ink: #17212b;
+  --sj-muted: #667685;
+  --sj-border: #dfe6eb;
+  --sj-shadow: 0 10px 26px rgba(23, 33, 43, 0.08);
+  --sj-radius: 16px;
+  --ucma-navy: #001c47;
+  --ucma-amber: #f7ab1b;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  background: var(--sj-bg);
+  color: var(--sj-ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+button, select { font: inherit; }
+
+.app-page { padding: 14px 18px 18px; }
+.app-header {
+  background: linear-gradient(135deg, #ffffff 0%, #edf4f7 100%);
+  border: 1px solid var(--sj-border);
+  border-radius: 18px;
+  padding: 16px 20px;
+  margin-bottom: 14px;
+  box-shadow: var(--sj-shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+}
+.app-title {
+  font-size: clamp(24px, 2.6vw, 38px);
+  line-height: 1.05;
+  font-weight: 760;
+  letter-spacing: -0.035em;
+  margin: 0;
+}
+.app-subtitle { color: var(--sj-muted); font-size: 14px; margin-top: 6px; }
+.app-badge {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #1f5c99;
+  background: rgba(31,92,153,.10);
+  border: 1px solid rgba(31,92,153,.18);
+  padding: 7px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: minmax(285px, 25%) minmax(0, 1fr);
+  grid-template-areas:
+    'filters main'
+    'coverage main'
+    'export main'
+    'help main';
+  gap: 12px;
+  align-items: start;
+}
+.cardish, .map-card, .kpi-card {
+  background: var(--sj-card);
+  border: 1px solid var(--sj-border);
+  border-radius: var(--sj-radius);
+  box-shadow: var(--sj-shadow);
+}
+.cardish { padding: 14px; }
+.filters-panel { grid-area: filters; }
+.coverage-panel { grid-area: coverage; }
+.export-panel { grid-area: export; }
+.help-panel { grid-area: help; }
+.main-panel { grid-area: main; min-width: 0; }
+.section-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .065em;
+  text-transform: uppercase;
+  color: #36556f;
+  margin-bottom: 10px;
+}
+.control { margin-bottom: 10px; }
+.control label { display: block; font-size: 12px; font-weight: 750; color: #31485c; margin-bottom: 5px; }
+.control select {
+  width: 100%;
+  min-height: 39px;
+  border-radius: 10px;
+  border: 1px solid var(--sj-border);
+  background: white;
+  padding: 7px 9px;
+}
+.kpi-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 12px; }
+.kpi-card { color: white; padding: 14px 16px; min-height: 86px; position: relative; overflow: hidden; }
+.kpi-card:after { content: ''; position: absolute; right: -28px; top: -36px; width: 110px; height: 110px; border-radius: 50%; background: rgba(255,255,255,.13); }
+.kpi-label { font-size: 12px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; opacity: .92; }
+.kpi-value { font-size: 28px; font-weight: 850; letter-spacing: -0.025em; line-height: 1; margin-top: 7px; }
+.kpi-meta { font-size: 12px; opacity: .88; margin-top: 5px; }
+.map-card { padding: 10px; }
+.map-wrap { width: 100%; height: 735px; min-height: 560px; border-radius: 14px; overflow: hidden; }
+.map-loading { display: grid; place-items: center; height: 100%; color: var(--sj-muted); background: #eef3f6; }
+.coverage-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.coverage-table th, .coverage-table td { border-bottom: 1px solid var(--sj-border); padding: 6px 7px; text-align: left; vertical-align: top; }
+.coverage-table th { color: #31485c; white-space: nowrap; }
+.help-copy { font-size: 12px; color: #526575; line-height: 1.45; }
+.legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; }
+.logo-strip { display: flex; gap: 10px; align-items: center; margin-top: 12px; }
+.logo-strip img { max-height: 24px; max-width: 120px; object-fit: contain; }
+
+@media (max-width: 1200px) {
+  .app-page { padding: 12px; }
+  .app-header { align-items: flex-start; flex-direction: column; }
+  .app-shell {
+    grid-template-columns: minmax(260px, 1fr) minmax(320px, 1.35fr);
+    grid-template-areas:
+      'filters coverage'
+      'main main'
+      'export help';
+  }
+  .map-wrap { height: 68vh; min-height: 560px; }
+}
+@media (max-width: 760px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'filters' 'main' 'coverage' 'export' 'help';
+  }
+  .kpi-row { grid-template-columns: 1fr; gap: 8px; }
+  .map-wrap { height: 64vh; min-height: 470px; }
+}

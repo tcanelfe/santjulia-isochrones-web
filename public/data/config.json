@@ -1,0 +1,16 @@
+{
+  "projectLabel": "Sant Julià de Lòria · Accessibilitat a peu",
+  "version": "6.0.0",
+  "bands": [5, 10, 15],
+  "bandColors": {
+    "5": "#1f5c99",
+    "10": "#4a9bc4",
+    "15": "#b3d9f0"
+  },
+  "colors": {
+    "equipaments": "#E74C3C",
+    "espais": "#27AE60",
+    "selected": "#F7AB1B",
+    "aparcaments": "#6E6259"
+  }
+}

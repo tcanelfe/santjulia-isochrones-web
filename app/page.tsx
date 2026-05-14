@@ -1,0 +1,133 @@
+'use client'
+
+import dynamic from 'next/dynamic'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Controls } from '@/components/Controls'
+import { CoveragePanel } from '@/components/CoveragePanel'
+import { KpiCards } from '@/components/KpiCards'
+import { loadWebData } from '@/lib/data'
+import type { CoverageRow, ScenarioId, WebData } from '@/lib/types'
+
+const IsochroneMap = dynamic(() => import('@/components/IsochroneMap').then(m => m.IsochroneMap), { ssr: false })
+
+function activeCoverage(data: WebData, scenario: ScenarioId, category: string, destination: string): CoverageRow[] {
+  if (category !== 'TOTS' && destination === '_CAT_') {
+    return data.coverageCategory.filter(r => r.escenari === scenario && r.key === category)
+  }
+  return data.coverageDestination.filter(r => r.escenari === scenario && r.key === destination)
+}
+
+export default function Page() {
+  const [data, setData] = useState<WebData | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [scenario, setScenario] = useState<ScenarioId>('everyone')
+  const [destType, setDestType] = useState('TOTS')
+  const [category, setCategory] = useState('TOTS')
+  const [destination, setDestination] = useState('')
+
+  useEffect(() => {
+    loadWebData()
+      .then(d => {
+        setData(d)
+        setScenario((d.scenarios[0]?.id || 'everyone') as ScenarioId)
+        setDestination(d.destinations[0]?.nom || '')
+      })
+      .catch(e => setError(e instanceof Error ? e.message : String(e)))
+  }, [])
+
+  const filteredDests = useMemo(() => {
+    if (!data) return []
+    return data.destinations.filter(d =>
+      (destType === 'TOTS' || d.tipus_desti === destType) &&
+      (category === 'TOTS' || d.us === category)
+    )
+  }, [category, data, destType])
+
+  useEffect(() => {
+    if (!data) return
+    if (category !== 'TOTS') {
+      if (destination === '' || !filteredDests.some(d => d.nom === destination)) setDestination('_CAT_')
+    } else if (!filteredDests.some(d => d.nom === destination)) {
+      setDestination(filteredDests[0]?.nom || '')
+    }
+  }, [category, data, destination, filteredDests])
+
+  // Stable handler refs — inline arrows would change identity every render,
+  // churning the MapLibre mount effect (map.remove() + rebuild). Must be
+  // declared before any early return so hook order stays constant.
+  const handleDestType = useCallback((v: string) => { setDestType(v); setCategory('TOTS') }, [])
+  const handleSelectDestination = useCallback((name: string) => { setCategory('TOTS'); setDestination(name) }, [])
+
+  if (error) {
+    return <main className="app-page"><div className="cardish">No s'han pogut carregar les dades web: {error}<br />Executa primer <code>npm run export:data</code> quan R estigui disponible.</div></main>
+  }
+  if (!data || !destination) {
+    return <main className="app-page"><div className="cardish">Carregant prototip…</div></main>
+  }
+
+  const coverageRows = activeCoverage(data, scenario, category, destination)
+  const coverageTitle = category !== 'TOTS' && destination === '_CAT_'
+    ? `Cobertura: ${category} (unió)`
+    : 'Cobertura poblacional'
+
+  return (
+    <main className="app-page">
+      <header className="app-header">
+        <div>
+          <h1 className="app-title">Cobertura poblacional</h1>
+          <div className="app-subtitle">{data.config.projectLabel} · prototip web</div>
+        </div>
+        <div className="app-badge">Migració web v0.1</div>
+      </header>
+      <div className="app-shell">
+        <Controls
+          scenarios={data.scenarios}
+          destinations={data.destinations}
+          scenario={scenario}
+          destType={destType}
+          category={category}
+          destination={destination}
+          onScenario={setScenario}
+          onDestType={handleDestType}
+          onCategory={setCategory}
+          onDestination={setDestination}
+        />
+        <CoveragePanel title={coverageTitle} rows={coverageRows} />
+        <section className="main-panel">
+          <KpiCards rows={coverageRows} bandColors={data.config.bandColors} />
+          <div className="map-card">
+            <IsochroneMap
+              config={data.config}
+              isochrones={data.layers.isochrones}
+              isochronesByCategory={data.layers.isochronesByCategory}
+              equipaments={data.layers.equipaments}
+              espaisEntrades={data.layers.espaisEntrades}
+              espaisPolygons={data.layers.espaisPolygons}
+              aparcaments={data.layers.aparcaments}
+              scenario={scenario}
+              destination={destination}
+              category={category}
+              onSelectDestination={handleSelectDestination}
+            />
+          </div>
+        </section>
+        <section className="cardish export-panel">
+          <div className="section-label">Exportació</div>
+          <p className="help-copy">El prototip web prioritza exploració ràpida. L'export PNG cartogràfic oficial es manté, de moment, al pipeline R.</p>
+        </section>
+        <section className="cardish help-copy help-panel">
+          <div className="section-label">Com llegir el mapa</div>
+          <strong>Zones blaves</strong>: isòcrones de 5, 10 i 15 minuts. El blau fosc és més proper.<br />
+          <span className="legend-dot" style={{ background: data.config.colors.equipaments }} />Equipament&nbsp;&nbsp;
+          <span className="legend-dot" style={{ background: data.config.colors.espais, borderRadius: 2 }} />Espai lliure&nbsp;&nbsp;
+          <span className="legend-dot" style={{ background: data.config.colors.aparcaments, borderRadius: 2 }} />Aparcament
+          <div className="logo-strip">
+            <img src="/logos/logo_carlemany.png" alt="Universitat Carlemany" />
+            <img src="/logos/logo_santjulia.png" alt="Sant Julià de Lòria" />
+            <img src="/logos/solarc.png" alt="Solarc" />
+          </div>
+        </section>
+      </div>
+    </main>
+  )
+}

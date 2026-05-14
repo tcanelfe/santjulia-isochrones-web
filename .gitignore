@@ -1,0 +1,5 @@
+node_modules/
+_node_modules_partial_DO_NOT_USE*/
+.next/
+out/
+.DS_Store

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "everyone",
+    "label": "Tothom",
+    "note": "Xarxa original · velocitat base 5 km/h",
+    "denominatorLabel": "població total",
+    "denominator": 10490
+  },
+  {
+    "id": "older_adults",
+    "label": "Gent gran",
+    "note": "3,5 km/h · escales bloquejades · entrades no accessibles excloses",
+    "denominatorLabel": "població de 65 anys o més",
+    "denominator": 1914
+  },
+  {
+    "id": "children_0_12",
+    "label": "Infants 0–12 anys",
+    "note": "3,7 km/h · velocitat infantil de referència · sense restriccions addicionals",
+    "denominatorLabel": "infants de 0–12 anys",
+    "denominator": 749
+  }
+]

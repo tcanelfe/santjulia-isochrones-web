@@ -1,0 +1,254 @@
+[
+  {
+    "nom": "Espai saludable per a la gent gran",
+    "us": "Area d'esports",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Auditori Rocafort",
+    "us": "Auditori",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Biblioteca de Sant Julia de Loria",
+    "us": "Biblioteca",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Cementiri vell de Sant Julia de Loria",
+    "us": "Cementiri",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Centre Major - Centre de dia",
+    "us": "Centre de dia",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Centre Cultural i de Congressos Lauredia",
+    "us": "Congressos",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Local de Corrreu i La Poste",
+    "us": "Correus",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Escola Andorra de Loria",
+    "us": "Escola",
+    "tipus_desti": "equipament",
+    "n_entrades": 2
+  },
+  {
+    "nom": "Escola Francesa",
+    "us": "Escola",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Escola Bressol Laurèdia Xics",
+    "us": "Escola bressol Laurèdia Xics",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Sant Bartomeu",
+    "us": "Esglesia catolica",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Sant Julia i Sant Germa de Loria",
+    "us": "Esglesia catolica",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Espai Laurèdia Jove",
+    "us": "Espai jove",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Centre Esportiu de Sant Julia de Loria",
+    "us": "Gimnàs",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Oficina de tursime",
+    "us": "Informacio",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "AR+I",
+    "us": "Institut",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Ministeri d'educacio",
+    "us": "Ministeri d'educacio",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Comu vell de Loria",
+    "us": "Oficina governamental",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Comu de Sant Julia de Loria",
+    "us": "Oficines administratives",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Oficines del Servei de Circulació",
+    "us": "Oficines administratives",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Centre d'Atencio Primaria",
+    "us": "Sanitari",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Universitat Carlemany",
+    "us": "Universitat",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Universitat Europea",
+    "us": "Universitat",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Universitat d'Andorra",
+    "us": "Universitat",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Sala de vetlles",
+    "us": "Vetlles",
+    "tipus_desti": "equipament",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Parc Infantil Camp de Perot",
+    "us": "parc_infantil",
+    "tipus_desti": "espai_lliure",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Parc Infantil d'Aixirivall",
+    "us": "parc_infantil",
+    "tipus_desti": "espai_lliure",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Parc Infantil de Terra Bogada",
+    "us": "parc_infantil",
+    "tipus_desti": "espai_lliure",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Parc Infantil del Prat Gran",
+    "us": "parc_infantil",
+    "tipus_desti": "espai_lliure",
+    "n_entrades": 2
+  },
+  {
+    "nom": "Parc Prat del Senzill",
+    "us": "parc_infantil",
+    "tipus_desti": "espai_lliure",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Plaça Francesc Cairat",
+    "us": "plaça",
+    "tipus_desti": "espai_lliure",
+    "n_entrades": 2
+  },
+  {
+    "nom": "Plaça Major",
+    "us": "plaça",
+    "tipus_desti": "espai_lliure",
+    "n_entrades": 3
+  },
+  {
+    "nom": "Plaça Rocacorba",
+    "us": "plaça",
+    "tipus_desti": "espai_lliure",
+    "n_entrades": 2
+  },
+  {
+    "nom": "Plaça d'Aixirivall",
+    "us": "plaça",
+    "tipus_desti": "espai_lliure",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Plaça de Calonge Sant Antoni",
+    "us": "plaça",
+    "tipus_desti": "espai_lliure",
+    "n_entrades": 3
+  },
+  {
+    "nom": "Plaça de Lauredia",
+    "us": "plaça",
+    "tipus_desti": "espai_lliure",
+    "n_entrades": 3
+  },
+  {
+    "nom": "Plaça de Sant Roc",
+    "us": "plaça",
+    "tipus_desti": "espai_lliure",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Plaça de la Germandat",
+    "us": "plaça",
+    "tipus_desti": "espai_lliure",
+    "n_entrades": 3
+  },
+  {
+    "nom": "Plaça del Mallador",
+    "us": "plaça",
+    "tipus_desti": "espai_lliure",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Plaça del Moli",
+    "us": "plaça",
+    "tipus_desti": "espai_lliure",
+    "n_entrades": 2
+  },
+  {
+    "nom": "Plaça del Sola",
+    "us": "plaça",
+    "tipus_desti": "espai_lliure",
+    "n_entrades": 2
+  },
+  {
+    "nom": "Plaça del Tossal",
+    "us": "plaça",
+    "tipus_desti": "espai_lliure",
+    "n_entrades": 1
+  }
+]
