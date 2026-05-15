@@ -58,7 +58,6 @@ button, select { font: inherit; }
   grid-template-columns: minmax(285px, 25%) minmax(0, 1fr);
   grid-template-areas:
     'filters main'
-    'layers main'
     'coverage main'
     'export main'
     'help main';
@@ -73,7 +72,6 @@ button, select { font: inherit; }
 }
 .cardish { padding: 14px; }
 .filters-panel { grid-area: filters; }
-.layers-panel { grid-area: layers; }
 .coverage-panel { grid-area: coverage; }
 .export-panel { grid-area: export; }
 .help-panel { grid-area: help; }
@@ -133,7 +131,9 @@ button, select { font: inherit; }
 .kpi-meta { font-size: 12px; opacity: .88; margin-top: 5px; }
 .map-card { padding: 10px; }
 .map-wrap { width: 100%; height: 735px; min-height: 560px; border-radius: 14px; overflow: hidden; position: relative; }
-.map-canvas { position: absolute; inset: 0; }
+.map-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.map-canvas .maplibregl-canvas-container,
+.map-canvas .maplibregl-canvas { width: 100% !important; height: 100% !important; }
 .map-loading { display: grid; place-items: center; height: 100%; color: var(--sj-muted); background: #eef3f6; }
 .map-floating-control {
   position: absolute;
@@ -198,17 +198,16 @@ button, select { font: inherit; }
   .app-shell {
     grid-template-columns: minmax(260px, 1fr) minmax(320px, 1.35fr);
     grid-template-areas:
-      'filters layers'
-      'coverage export'
+      'filters coverage'
       'main main'
-      'help help';
+      'export help';
   }
   .map-wrap { height: 68vh; min-height: 560px; }
 }
 @media (max-width: 760px) {
   .app-shell {
     grid-template-columns: 1fr;
-    grid-template-areas: 'filters' 'layers' 'main' 'coverage' 'export' 'help';
+    grid-template-areas: 'filters' 'main' 'coverage' 'export' 'help';
   }
   .kpi-row { grid-template-columns: 1fr; gap: 8px; }
   .map-wrap { height: 64vh; min-height: 470px; }
