@@ -43,7 +43,7 @@ function propString(f: Feature, ...keys: string[]): string | undefined {
 }
 
 function featureName(f: Feature): string | undefined {
-  return propString(f, 'nom', 'Nom')
+  return propString(f, 'nom', 'Nom', 'name', 'Name', 'Tipologia', 'tipus', 'type')
 }
 
 function featureCategory(f: Feature): string | undefined {
@@ -167,7 +167,13 @@ export function IsochroneMap({
           id: 'aparcaments',
           type: 'fill',
           source: 'aparcaments',
-          paint: { 'fill-color': config.colors.aparcaments, 'fill-opacity': 0.35, 'fill-outline-color': config.colors.aparcaments }
+          paint: { 'fill-color': config.colors.aparcaments, 'fill-opacity': 0.48, 'fill-outline-color': config.colors.aparcaments }
+        })
+        map.addLayer({
+          id: 'aparcaments-line',
+          type: 'line',
+          source: 'aparcaments',
+          paint: { 'line-color': config.colors.aparcaments, 'line-width': 2.2, 'line-opacity': 0.9 }
         })
       }
       map.addSource('equipaments', { type: 'geojson', data: equipaments })
@@ -209,18 +215,36 @@ export function IsochroneMap({
         filter: ['==', ['geometry-type'], 'Point'],
         paint: { 'circle-radius': 8, 'circle-color': config.colors.selected, 'circle-stroke-color': '#000000', 'circle-stroke-width': 1.5 }
       })
+      map.addLayer({
+        id: 'selected-label',
+        type: 'symbol',
+        source: 'selected',
+        layout: {
+          'text-field': ['coalesce', ['get', 'nom'], ['get', 'Nom'], ['get', 'name'], ['get', 'Name'], 'Seleccionat'],
+          'text-size': 12,
+          'text-anchor': 'top',
+          'text-offset': [0, 1.2],
+          'text-allow-overlap': true
+        },
+        paint: {
+          'text-color': '#17212b',
+          'text-halo-color': '#ffffff',
+          'text-halo-width': 1.5
+        }
+      })
 
-      for (const layerId of ['equipaments', 'espais-entrades', 'espais-polygons']) {
+      for (const layerId of ['equipaments', 'espais-entrades', 'espais-polygons', 'aparcaments']) {
         if (!map.getLayer(layerId)) continue
         map.on('click', layerId, e => {
           const feature = e.features?.[0]
           const name = feature ? featureName(feature) : undefined
-          if (!name) return
+          const label = name || (layerId === 'aparcaments' ? 'Aparcament' : undefined)
+          if (!label) return
           new maplibregl.Popup({ closeButton: false, closeOnClick: true, offset: 8 })
             .setLngLat(e.lngLat)
-            .setText(name)
+            .setText(label)
             .addTo(map)
-          onSelectDestination(name)
+          if (layerId !== 'aparcaments' && name) onSelectDestination(name)
         })
         map.on('mouseenter', layerId, () => { map.getCanvas().style.cursor = 'pointer' })
         map.on('mouseleave', layerId, () => { map.getCanvas().style.cursor = '' })
@@ -270,6 +294,11 @@ export function IsochroneMap({
     map.setLayoutProperty('espais-entrades', 'visibility', 'none')
     if (map.getLayer('espais-polygons')) map.setLayoutProperty('espais-polygons', 'visibility', visibleLayers.espaisPolygons ? 'visible' : 'none')
     if (map.getLayer('aparcaments')) map.setLayoutProperty('aparcaments', 'visibility', visibleLayers.aparcaments ? 'visible' : 'none')
+    if (map.getLayer('aparcaments-line')) map.setLayoutProperty('aparcaments-line', 'visibility', visibleLayers.aparcaments ? 'visible' : 'none')
+
+    for (const layerId of ['espais-polygons', 'aparcaments', 'aparcaments-line', 'equipaments', 'selected-fill', 'selected-point', 'selected-label']) {
+      if (map.getLayer(layerId)) map.moveLayer(layerId)
+    }
 
     requestAnimationFrame(() => safeFitBounds(map, selectedVisibleIso))
   }, [baseLayer, category, destination, equipaments, espaisEntrades, espaisPolygons, isochrones, isochronesByCategory, scenario, visibleBands, visibleLayers, mapReady])

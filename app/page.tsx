@@ -11,10 +11,10 @@ import type { CoverageRow, IsochroneBand, MapBaseLayer, MapLayerVisibility, Scen
 const IsochroneMap = dynamic(() => import('@/components/IsochroneMap').then(m => m.IsochroneMap), { ssr: false })
 const DEFAULT_VISIBLE_LAYERS: MapLayerVisibility = {
   isochrones: true,
-  equipaments: true,
+  equipaments: false,
   espaisEntrades: false,
-  espaisPolygons: true,
-  aparcaments: true
+  espaisPolygons: false,
+  aparcaments: false
 }
 
 function activeCoverage(data: WebData, scenario: ScenarioId, category: string, destination: string): CoverageRow[] {

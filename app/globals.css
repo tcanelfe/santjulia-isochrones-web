@@ -147,8 +147,8 @@ button, select { font: inherit; }
   color: #31485c;
   backdrop-filter: blur(6px);
 }
-.map-layer-control { top: 10px; left: 10px; width: 172px; }
-.map-base-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+.map-layer-control { top: 10px; left: 10px; width: 190px; }
+.map-base-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
 .map-legend { right: 10px; bottom: 30px; min-width: 132px; }
 .map-control-title { font-size: 11px; font-weight: 850; letter-spacing: .055em; text-transform: uppercase; color: #36556f; margin-bottom: 6px; }
 .mini-toggle {
@@ -156,8 +156,8 @@ button, select { font: inherit; }
   background: #f6f9fb;
   color: #36556f;
   border-radius: 999px;
-  padding: 4px 8px;
-  font-size: 11px;
+  padding: 4px 6px;
+  font-size: 10px;
   font-weight: 800;
   cursor: pointer;
 }
@@ -211,7 +211,7 @@ button, select { font: inherit; }
   }
   .kpi-row { grid-template-columns: 1fr; gap: 8px; }
   .map-wrap { height: 64vh; min-height: 470px; }
-  .map-layer-control { top: 8px; left: 8px; width: 164px; }
+  .map-layer-control { top: 8px; left: 8px; width: 184px; }
   .map-legend { right: 8px; bottom: 24px; }
   .coverage-table { display: none; }
   .coverage-cards { display: block; }
