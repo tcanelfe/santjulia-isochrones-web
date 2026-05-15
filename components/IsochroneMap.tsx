@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import maplibregl, { Map } from 'maplibre-gl'
 import bbox from '@turf/bbox'
 import type { Feature, FeatureCollection, Geometry } from 'geojson'
-import type { ScenarioId, WebConfig } from '@/lib/types'
+import type { IsochroneBand, MapLayerVisibility, ScenarioId, WebConfig } from '@/lib/types'
 
 type Props = {
   config: WebConfig
@@ -17,6 +17,8 @@ type Props = {
   scenario: ScenarioId
   destination: string
   category: string
+  visibleBands: IsochroneBand[]
+  visibleLayers: MapLayerVisibility
   onSelectDestination: (name: string) => void
 }
 
@@ -62,6 +64,8 @@ export function IsochroneMap({
   scenario,
   destination,
   category,
+  visibleBands,
+  visibleLayers,
   onSelectDestination
 }: Props) {
   const elRef = useRef<HTMLDivElement | null>(null)
@@ -188,29 +192,39 @@ export function IsochroneMap({
     const pred = destinationFilter(destination, category)
     const isoSource = category !== 'TOTS' && destination === '_CAT_' ? isochronesByCategory : isochrones
     const selectedIso = filterFeatures(isoSource, f => f.properties?.escenari === scenario && pred(f))
-    for (const b of [15, 10, 5]) {
-      const bandData = filterFeatures(selectedIso, f => Number(f.properties?.banda_min) === b)
+    const selectedVisibleIso = filterFeatures(selectedIso, f => visibleBands.includes(Number(f.properties?.banda_min) as IsochroneBand))
+    for (const b of [15, 10, 5] as IsochroneBand[]) {
+      const bandData = visibleLayers.isochrones && visibleBands.includes(b)
+        ? filterFeatures(selectedIso, f => Number(f.properties?.banda_min) === b)
+        : emptyFc()
       const source = map.getSource(`iso-${b}`) as maplibregl.GeoJSONSource | undefined
       source?.setData(bandData)
     }
+
     const selectedPieces: Feature<Geometry>[] = []
     if (category !== 'TOTS' && destination === '_CAT_') {
-      selectedPieces.push(...filterFeatures(equipaments, f => featureCategory(f) === category).features as Feature<Geometry>[])
-      selectedPieces.push(...filterFeatures(espaisEntrades, f => featureCategory(f) === category).features as Feature<Geometry>[])
-      if (espaisPolygons) selectedPieces.push(...filterFeatures(espaisPolygons, f => featureCategory(f) === category || selectedIso.features.some(x => featureName(x) === featureName(f))).features as Feature<Geometry>[])
+      if (visibleLayers.equipaments) selectedPieces.push(...filterFeatures(equipaments, f => featureCategory(f) === category).features as Feature<Geometry>[])
+      if (visibleLayers.espaisEntrades) selectedPieces.push(...filterFeatures(espaisEntrades, f => featureCategory(f) === category).features as Feature<Geometry>[])
+      if (visibleLayers.espaisPolygons && espaisPolygons) selectedPieces.push(...filterFeatures(espaisPolygons, f => featureCategory(f) === category || selectedIso.features.some(x => featureName(x) === featureName(f))).features as Feature<Geometry>[])
     } else {
-      selectedPieces.push(...filterFeatures(equipaments, f => featureName(f) === destination).features as Feature<Geometry>[])
-      selectedPieces.push(...filterFeatures(espaisEntrades, f => featureName(f) === destination).features as Feature<Geometry>[])
-      if (espaisPolygons) selectedPieces.push(...filterFeatures(espaisPolygons, f => featureName(f) === destination).features as Feature<Geometry>[])
+      if (visibleLayers.equipaments) selectedPieces.push(...filterFeatures(equipaments, f => featureName(f) === destination).features as Feature<Geometry>[])
+      if (visibleLayers.espaisEntrades) selectedPieces.push(...filterFeatures(espaisEntrades, f => featureName(f) === destination).features as Feature<Geometry>[])
+      if (visibleLayers.espaisPolygons && espaisPolygons) selectedPieces.push(...filterFeatures(espaisPolygons, f => featureName(f) === destination).features as Feature<Geometry>[])
     }
     const selectedFc: FeatureCollection = { type: 'FeatureCollection', features: selectedPieces }
     ;(map.getSource('selected') as maplibregl.GeoJSONSource | undefined)?.setData(selectedFc)
-    if (selectedIso.features.length > 0) {
-      const [minX, minY, maxX, maxY] = bbox(selectedIso)
+
+    map.setLayoutProperty('equipaments', 'visibility', visibleLayers.equipaments ? 'visible' : 'none')
+    map.setLayoutProperty('espais-entrades', 'visibility', visibleLayers.espaisEntrades ? 'visible' : 'none')
+    if (map.getLayer('espais-polygons')) map.setLayoutProperty('espais-polygons', 'visibility', visibleLayers.espaisPolygons ? 'visible' : 'none')
+    if (map.getLayer('aparcaments')) map.setLayoutProperty('aparcaments', 'visibility', visibleLayers.aparcaments ? 'visible' : 'none')
+
+    if (selectedVisibleIso.features.length > 0) {
+      const [minX, minY, maxX, maxY] = bbox(selectedVisibleIso)
       map.fitBounds([[minX, minY], [maxX, maxY]], { padding: 40, duration: 550 })
     }
     setTimeout(() => map.resize(), 50)
-  }, [category, destination, equipaments, espaisEntrades, espaisPolygons, isochrones, isochronesByCategory, scenario, mapReady])
+  }, [category, destination, equipaments, espaisEntrades, espaisPolygons, isochrones, isochronesByCategory, scenario, visibleBands, visibleLayers, mapReady])
 
   return <div ref={elRef} className="map-wrap"><div className="map-loading">Carregant mapa…</div></div>
 }
