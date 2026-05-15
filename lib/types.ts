@@ -59,12 +59,31 @@ export type WebConfig = {
   }
 }
 
+export type PopulationTotals = {
+  persones: number
+  dones: number
+  homes: number
+  infants_0_12: number
+  joves: number
+  adults: number
+  gent_gran: number
+}
+
+export type ExportManifestItem = {
+  scope: 'destination' | 'category'
+  key: string
+  scenario: ScenarioId
+  href: string
+}
+
 export type WebData = {
   config: WebConfig
   scenarios: Scenario[]
   destinations: Destination[]
   coverageDestination: CoverageRow[]
   coverageCategory: CoverageRow[]
+  populationTotals: PopulationTotals
+  exportManifest: ExportManifestItem[]
   layers: {
     isochrones: FeatureCollection
     isochronesByCategory: FeatureCollection

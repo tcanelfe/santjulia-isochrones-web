@@ -187,6 +187,23 @@ button, select { font: inherit; }
 .coverage-time { font-size: 10px; font-weight: 850; color: #36556f; text-transform: uppercase; letter-spacing: .04em; }
 .coverage-value { font-size: 13px; font-weight: 850; color: var(--sj-ink); line-height: 1.15; margin-top: 3px; }
 .coverage-pct { font-size: 11px; color: var(--sj-muted); line-height: 1.1; margin-top: 2px; }
+.export-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 10px; }
+.export-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--sj-border);
+  font-size: 12px;
+  font-weight: 850;
+  text-decoration: none;
+  cursor: pointer;
+}
+.export-button.primary { background: #1f5c99; border-color: #1f5c99; color: white; }
+.export-button.secondary { background: #f6f9fb; color: #36556f; }
+.export-button:disabled { opacity: .48; cursor: not-allowed; }
+.export-note { margin: 0; }
 .help-copy { font-size: 12px; color: #526575; line-height: 1.45; }
 .legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; }
 .logo-strip { display: flex; gap: 10px; align-items: center; margin-top: 12px; }
