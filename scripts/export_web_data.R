@@ -123,7 +123,11 @@ if (file.exists(APARCAMENTS_PATH)) {
 
 message("Computing web summaries...")
 TOTAL_POB <- sum(pob_pts$persones, na.rm = TRUE)
+TOTAL_DONES <- sum(pob_pts$dones, na.rm = TRUE)
+TOTAL_HOMES <- sum(pob_pts$homes, na.rm = TRUE)
 TOTAL_INFANTS <- sum(pob_pts$infants_0_12, na.rm = TRUE)
+TOTAL_JOVES <- sum(pob_pts$joves, na.rm = TRUE)
+TOTAL_ADULTS <- sum(pob_pts$adults, na.rm = TRUE)
 TOTAL_GENT_GRAN <- sum(pob_pts$gent_gran, na.rm = TRUE)
 scenario_denominator <- function(sc) switch(sc,
   older_adults = TOTAL_GENT_GRAN,
@@ -223,6 +227,15 @@ message("Writing JSON...")
 write_json(config, file.path(DATA_OUT, "config.json"))
 write_json(scenarios, file.path(DATA_OUT, "scenarios.json"))
 write_json(destinations, file.path(DATA_OUT, "destinations.json"))
+write_json(list(
+  persones = TOTAL_POB,
+  dones = TOTAL_DONES,
+  homes = TOTAL_HOMES,
+  infants_0_12 = TOTAL_INFANTS,
+  joves = TOTAL_JOVES,
+  adults = TOTAL_ADULTS,
+  gent_gran = TOTAL_GENT_GRAN
+), file.path(DATA_OUT, "population_totals.json"))
 write_json(coverage_destination, file.path(DATA_OUT, "coverage_by_destination.json"))
 write_json(coverage_category, file.path(DATA_OUT, "coverage_by_category.json"))
 

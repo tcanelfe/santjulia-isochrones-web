@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controls } from '@/components/Controls'
 import { CoveragePanel } from '@/components/CoveragePanel'
+import { ExportPanel } from '@/components/ExportPanel'
 import { KpiCards } from '@/components/KpiCards'
 import { loadWebData } from '@/lib/data'
 import type { CoverageRow, IsochroneBand, MapBaseLayer, MapLayerVisibility, ScenarioId, WebData } from '@/lib/types'
@@ -85,7 +86,10 @@ export default function Page() {
   }
 
   const coverageRows = activeCoverage(data, scenario, category, destination)
-  const coverageTitle = category !== 'TOTS' && destination === '_CAT_'
+  const selectedScenario = data.scenarios.find(s => s.id === scenario) || data.scenarios[0]
+  const exportScope = category !== 'TOTS' && destination === '_CAT_' ? 'category' : 'destination'
+  const exportLabel = exportScope === 'category' ? category : destination
+  const coverageTitle = exportScope === 'category'
     ? `Cobertura: ${category} (unió)`
     : 'Cobertura poblacional'
 
@@ -136,10 +140,14 @@ export default function Page() {
             />
           </div>
         </section>
-        <section className="cardish export-panel">
-          <div className="section-label">Exportació</div>
-          <p className="help-copy">El prototip web prioritza exploració ràpida. L'export PNG cartogràfic oficial es manté, de moment, al pipeline R.</p>
-        </section>
+        <ExportPanel
+          rows={coverageRows}
+          scenario={selectedScenario}
+          totals={data.populationTotals}
+          label={exportLabel}
+          scope={exportScope}
+          manifest={data.exportManifest}
+        />
         <section className="cardish help-copy help-panel">
           <div className="section-label">Com llegir el mapa</div>
           <strong>Zones blaves</strong>: isòcrones de 5, 10 i 15 minuts. El blau fosc és més proper.<br />

@@ -36,7 +36,7 @@ Important data-contract decisions:
 - Isochrone polygons are simplified on export with a 1.5 m tolerance for faster first paint; the analytical GPKG is not changed.
 - v1 exports stacked 5/10/15 minute polygons. If opacity looks muddy in MapLibre, the next iteration should export ring polygons directly from R.
 - Text columns are exported as UTF-8, and NFC normalization is applied when `stringi` is available.
-- The public static web app cannot call R. The polished PNG cartographic export remains an internal R tool for v1; the browser may later add a lightweight screenshot export.
+- The public static web app cannot call R at click time. CSV is generated in the browser, while polished PNG exports are precomputed by R into `public/exports/` and exposed through `public/exports/manifest.json`.
 
 ## Setup on a machine with R and Node
 
@@ -45,6 +45,7 @@ From this folder:
 ```bash
 npm install
 npm run export:data
+npm run export:png
 npm run dev
 ```
 
@@ -78,6 +79,7 @@ public/data/
 ├── destinations.json
 ├── coverage_by_destination.json
 ├── coverage_by_category.json
+├── population_totals.json
 ├── layers/
 │   ├── isochrones.geojson              # simplified destination geometries
 │   ├── isochrones_by_category.geojson  # precomputed category-union geometries
@@ -88,6 +90,25 @@ public/data/
 └── qa/
     └── qa_origins.geojson
 ```
+
+## PNG export generation
+
+The web app uses the mature v6 Shiny/R cartographic exporter for official PNGs, but precomputes them so the deployed static site never needs to run R.
+
+```bash
+npm run export:data
+npm run export:png
+```
+
+`npm run export:png` writes:
+
+```text
+public/exports/
+├── manifest.json
+└── *.png
+```
+
+The PNG button is disabled until `manifest.json` contains the current destination/category + scenario combination. Re-run `npm run export:png` after changing destinations, categories, scenarios, logos, or the R static-map design.
 
 ## Current status
 
@@ -106,7 +127,7 @@ Known next steps:
 4. Test `npm run dev`.
 5. Manually spot-check several web filters/KPIs against the Shiny app after the automated parity gate passes.
 6. Decide whether raw GeoJSON is fast enough or whether isochrones/network should move to PMTiles.
-7. Keep the polished PNG export in R for now.
+7. Re-run `npm run export:png` whenever the exported data or official map design changes.
 
 ## Migration rationale checkpoint
 
