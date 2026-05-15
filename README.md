@@ -97,8 +97,10 @@ The web app uses the mature v6 Shiny/R cartographic exporter for official PNGs, 
 
 ```bash
 npm run export:data
-npm run export:png
+SANTJULIA_V6_DIR="/path/to/Isochrones/v6" npm run export:png
 ```
+
+If the web repo is cloned as a sibling of `v6/`, the environment variable is not needed. If the repo is cloned elsewhere, such as `~/dev/santjulia_web_prototype`, set `SANTJULIA_V6_DIR` to the real v6 folder.
 
 `npm run export:png` writes:
 

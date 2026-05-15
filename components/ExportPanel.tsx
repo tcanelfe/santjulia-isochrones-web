@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { exportCoverageCsv, exportKey } from '@/lib/exports'
 import type { CoverageRow, ExportManifestItem, PopulationTotals, Scenario } from '@/lib/types'
 
@@ -14,6 +15,18 @@ type Props = {
 
 export function ExportPanel({ rows, scenario, totals, label, scope, manifest }: Props) {
   const png = manifest.find(item => exportKey(item.scope, item.key, item.scenario) === exportKey(scope, label, scenario.id))
+  const [linkCopied, setLinkCopied] = useState(false)
+  const copyLink = async () => {
+    if (typeof window === 'undefined') return
+    try {
+      await navigator.clipboard.writeText(window.location.href)
+      setLinkCopied(true)
+      setTimeout(() => setLinkCopied(false), 2000)
+    } catch {
+      // Clipboard API can fail on non-secure contexts; fall back to a prompt.
+      window.prompt('Copia aquest enllaç:', window.location.href)
+    }
+  }
   return (
     <section className="cardish export-panel">
       <div className="section-label">Exportació</div>
@@ -34,9 +47,12 @@ export function ExportPanel({ rows, scenario, totals, label, scope, manifest }: 
             PNG
           </button>
         )}
+        <button type="button" className="export-button secondary" onClick={copyLink}>
+          {linkCopied ? 'Copiat ✓' : 'Copia enllaç'}
+        </button>
       </div>
       <p className="help-copy export-note">
-        El CSV es genera al navegador. El PNG és el mapa cartogràfic oficial precomputat amb el pipeline R.
+        El CSV es genera al navegador. El PNG és el mapa cartogràfic oficial precomputat amb el pipeline R. L'enllaç conserva la vista seleccionada (escenari, destinació, capes).
       </p>
     </section>
   )
