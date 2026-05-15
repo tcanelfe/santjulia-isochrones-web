@@ -57,6 +57,22 @@ function destinationFilter(destination: string, category: string) {
   }
 }
 
+function safeFitBounds(map: Map, fc: FeatureCollection) {
+  if (fc.features.length === 0) return
+  map.resize()
+  const canvas = map.getCanvas()
+  const width = canvas.clientWidth
+  const height = canvas.clientHeight
+  if (width < 120 || height < 120) return
+
+  const [minX, minY, maxX, maxY] = bbox(fc)
+  if (![minX, minY, maxX, maxY].every(Number.isFinite)) return
+  if (minX === maxX || minY === maxY) return
+
+  const padding = Math.max(12, Math.min(40, Math.floor(Math.min(width, height) * 0.08)))
+  map.fitBounds([[minX, minY], [maxX, maxY]], { padding, duration: 550 })
+}
+
 export function IsochroneMap({
   config,
   isochrones,
@@ -204,7 +220,10 @@ export function IsochroneMap({
         map.on('mouseenter', layerId, () => { map.getCanvas().style.cursor = 'pointer' })
         map.on('mouseleave', layerId, () => { map.getCanvas().style.cursor = '' })
       }
-      setMapReady(true)
+      requestAnimationFrame(() => {
+        map.resize()
+        setMapReady(true)
+      })
     })
     mapRef.current = map
     return () => { map.remove(); mapRef.current = null; setMapReady(false) }
@@ -247,11 +266,7 @@ export function IsochroneMap({
     if (map.getLayer('espais-polygons')) map.setLayoutProperty('espais-polygons', 'visibility', visibleLayers.espaisPolygons ? 'visible' : 'none')
     if (map.getLayer('aparcaments')) map.setLayoutProperty('aparcaments', 'visibility', visibleLayers.aparcaments ? 'visible' : 'none')
 
-    if (selectedVisibleIso.features.length > 0) {
-      const [minX, minY, maxX, maxY] = bbox(selectedVisibleIso)
-      map.fitBounds([[minX, minY], [maxX, maxY]], { padding: 40, duration: 550 })
-    }
-    setTimeout(() => map.resize(), 50)
+    requestAnimationFrame(() => safeFitBounds(map, selectedVisibleIso))
   }, [baseLayer, category, destination, equipaments, espaisEntrades, espaisPolygons, isochrones, isochronesByCategory, scenario, visibleBands, visibleLayers, mapReady])
 
   const visibleDestinationLegend = [
