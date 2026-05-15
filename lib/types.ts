@@ -57,6 +57,8 @@ export type WebConfig = {
     selected: string
     aparcaments: string
   }
+  dataVintage?: string
+  exportedAt?: string
 }
 
 export type PopulationTotals = {

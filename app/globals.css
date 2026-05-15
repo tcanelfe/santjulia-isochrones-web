@@ -233,3 +233,40 @@ button, select { font: inherit; }
   .coverage-table { display: none; }
   .coverage-cards { display: block; }
 }
+
+/* Isochrone band popup */
+.maplibregl-popup-content .map-popup {
+  font-family: inherit;
+  color: #17212b;
+  min-width: 160px;
+}
+.maplibregl-popup-content .map-popup-title {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 2px;
+  color: #1f3a5f;
+}
+.maplibregl-popup-content .map-popup-band {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #667685;
+  margin-bottom: 6px;
+}
+.maplibregl-popup-content .map-popup-stat { font-size: 14px; }
+.maplibregl-popup-content .map-popup-stat strong { font-size: 18px; color: #17212b; }
+.maplibregl-popup-content .map-popup-pct { font-size: 12px; color: #667685; margin-top: 2px; }
+
+/* Map error boundary fallback */
+.map-error {
+  padding: 24px;
+  background: #fff7f5;
+  border: 1px solid #f1c8bf;
+  border-radius: 12px;
+  color: #6b1f1f;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+.map-error p { margin: 0; line-height: 1.45; }

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import maplibregl, { Map } from 'maplibre-gl'
 import bbox from '@turf/bbox'
 import type { Feature, FeatureCollection, Geometry } from 'geojson'
-import type { IsochroneBand, MapBaseLayer, MapLayerVisibility, ScenarioId, WebConfig } from '@/lib/types'
+import type { CoverageRow, IsochroneBand, MapBaseLayer, MapLayerVisibility, ScenarioId, WebConfig } from '@/lib/types'
 
 type Props = {
   config: WebConfig
@@ -24,6 +24,8 @@ type Props = {
   onToggleBand: (band: IsochroneBand) => void
   onToggleLayer: (layer: keyof MapLayerVisibility) => void
   onSelectDestination: (name: string) => void
+  coverageRows: CoverageRow[]
+  selectedLabel: string
 }
 
 function filterFeatures(fc: FeatureCollection, predicate: (f: Feature) => boolean): FeatureCollection {
@@ -32,6 +34,15 @@ function filterFeatures(fc: FeatureCollection, predicate: (f: Feature) => boolea
 
 function emptyFc(): FeatureCollection {
   return { type: 'FeatureCollection', features: [] }
+}
+
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
 }
 
 function propString(f: Feature, ...keys: string[]): string | undefined {
@@ -90,10 +101,16 @@ export function IsochroneMap({
   onBaseLayer,
   onToggleBand,
   onToggleLayer,
-  onSelectDestination
+  onSelectDestination,
+  coverageRows,
+  selectedLabel
 }: Props) {
   const elRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<Map | null>(null)
+  // Latest coverage + label, kept in a ref so the iso-band click handler
+  // (registered once on map load) reads current values without re-binding.
+  const coverageRef = useRef<{ rows: CoverageRow[]; label: string }>({ rows: coverageRows, label: selectedLabel })
+  useEffect(() => { coverageRef.current = { rows: coverageRows, label: selectedLabel } }, [coverageRows, selectedLabel])
   // Flips true once the map's 'load' event has created all sources/layers.
   // The data-sync effect gates on this instead of map.loaded() — otherwise
   // it races the async load on mount and never re-fires.
@@ -114,15 +131,18 @@ export function IsochroneMap({
           },
           osm: {
             type: 'raster',
-            tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', 'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png'],
+            tiles: [
+              'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
+              'https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png'
+            ],
             tileSize: 256,
-            attribution: '© OpenStreetMap contributors'
+            attribution: '© OpenStreetMap © CARTO'
           },
           satellite: {
             type: 'raster',
             tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
             tileSize: 256,
-            attribution: 'Tiles © Esri'
+            attribution: 'Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community'
           }
         },
         layers: [
@@ -249,6 +269,31 @@ export function IsochroneMap({
         map.on('mouseenter', layerId, () => { map.getCanvas().style.cursor = 'pointer' })
         map.on('mouseleave', layerId, () => { map.getCanvas().style.cursor = '' })
       }
+
+      // Click on an isochrone band → popup with coverage for that band.
+      for (const b of [5, 10, 15] as IsochroneBand[]) {
+        const layerId = `iso-${b}`
+        map.on('click', layerId, e => {
+          const { rows, label } = coverageRef.current
+          const row = rows.find(r => r.banda_min === b)
+          if (!row) return
+          const persones = Number(row.persones || 0)
+          const pct = Number.isFinite(row.percentatge) ? row.percentatge.toFixed(1) : '—'
+          const html = `
+            <div class="map-popup">
+              <div class="map-popup-title">${escapeHtml(label)}</div>
+              <div class="map-popup-band">${b} min a peu</div>
+              <div class="map-popup-stat"><strong>${persones.toLocaleString('ca-AD')}</strong> persones</div>
+              <div class="map-popup-pct">${pct}% del total</div>
+            </div>`
+          new maplibregl.Popup({ closeButton: true, closeOnClick: true, offset: 4, maxWidth: '240px' })
+            .setLngLat(e.lngLat)
+            .setHTML(html)
+            .addTo(map)
+        })
+        map.on('mouseenter', layerId, () => { map.getCanvas().style.cursor = 'pointer' })
+        map.on('mouseleave', layerId, () => { map.getCanvas().style.cursor = '' })
+      }
       requestAnimationFrame(() => {
         map.resize()
         setMapReady(true)
@@ -317,7 +362,7 @@ export function IsochroneMap({
         <div className="map-base-row">
           {([
             ['light', 'Clar'],
-            ['osm', 'OSM'],
+            ['osm', 'Carrer'],
             ['satellite', 'Satèl·lit']
           ] as Array<[MapBaseLayer, string]>).map(([id, label]) => (
             <button key={id} type="button" className={baseLayer === id ? 'mini-toggle active' : 'mini-toggle'} onClick={() => onBaseLayer(id)}>{label}</button>

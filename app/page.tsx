@@ -6,6 +6,7 @@ import { Controls } from '@/components/Controls'
 import { CoveragePanel } from '@/components/CoveragePanel'
 import { ExportPanel } from '@/components/ExportPanel'
 import { KpiCards } from '@/components/KpiCards'
+import { MapErrorBoundary } from '@/components/MapErrorBoundary'
 import { loadWebData } from '@/lib/data'
 import type { CoverageRow, IsochroneBand, MapBaseLayer, MapLayerVisibility, ScenarioId, WebData } from '@/lib/types'
 
@@ -98,9 +99,11 @@ export default function Page() {
       <header className="app-header">
         <div>
           <h1 className="app-title">Cobertura poblacional</h1>
-          <div className="app-subtitle">{data.config.projectLabel} · prototip web</div>
+          <div className="app-subtitle">{data.config.projectLabel}</div>
         </div>
-        <div className="app-badge">Migració web v0.1</div>
+        {data.config.dataVintage && (
+          <div className="app-badge">Dades {data.config.dataVintage}</div>
+        )}
       </header>
       <div className="app-shell">
         <Controls
@@ -119,25 +122,29 @@ export default function Page() {
         <section className="main-panel">
           <KpiCards rows={coverageRows} bandColors={data.config.bandColors} />
           <div className="map-card">
-            <IsochroneMap
-              config={data.config}
-              isochrones={data.layers.isochrones}
-              isochronesByCategory={data.layers.isochronesByCategory}
-              equipaments={data.layers.equipaments}
-              espaisEntrades={data.layers.espaisEntrades}
-              espaisPolygons={data.layers.espaisPolygons}
-              aparcaments={data.layers.aparcaments}
-              scenario={scenario}
-              destination={destination}
-              category={category}
-              visibleBands={visibleBands}
-              visibleLayers={visibleLayers}
-              baseLayer={baseLayer}
-              onBaseLayer={setBaseLayer}
-              onToggleBand={handleToggleBand}
-              onToggleLayer={handleToggleLayer}
-              onSelectDestination={handleSelectDestination}
-            />
+            <MapErrorBoundary>
+              <IsochroneMap
+                config={data.config}
+                isochrones={data.layers.isochrones}
+                isochronesByCategory={data.layers.isochronesByCategory}
+                equipaments={data.layers.equipaments}
+                espaisEntrades={data.layers.espaisEntrades}
+                espaisPolygons={data.layers.espaisPolygons}
+                aparcaments={data.layers.aparcaments}
+                scenario={scenario}
+                destination={destination}
+                category={category}
+                visibleBands={visibleBands}
+                visibleLayers={visibleLayers}
+                baseLayer={baseLayer}
+                onBaseLayer={setBaseLayer}
+                onToggleBand={handleToggleBand}
+                onToggleLayer={handleToggleLayer}
+                onSelectDestination={handleSelectDestination}
+                coverageRows={coverageRows}
+                selectedLabel={exportLabel}
+              />
+            </MapErrorBoundary>
           </div>
         </section>
         <ExportPanel

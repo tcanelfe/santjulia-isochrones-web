@@ -220,7 +220,9 @@ config <- list(
     espais = COL_ESPAI,
     selected = COL_SELECTED,
     aparcaments = COL_APARCAMENTS
-  )
+  ),
+  dataVintage = format(Sys.Date(), "%Y"),
+  exportedAt = format(Sys.time(), "%Y-%m-%dT%H:%M:%S%z")
 )
 
 message("Writing JSON...")
