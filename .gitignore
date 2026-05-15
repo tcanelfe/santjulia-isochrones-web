@@ -3,3 +3,5 @@ _node_modules_partial_DO_NOT_USE*/
 .next/
 out/
 .DS_Store
+tsconfig.tsbuildinfo
+tsconfig.tsbuildinfo

@@ -98,6 +98,7 @@ if (file.exists(ESPAI_POLY_PATH)) {
       sf::st_transform(crs_analysis) |>
       sf::st_make_valid()
     if ("Nom" %in% names(p) && !"nom" %in% names(p)) p <- dplyr::rename(p, nom = Nom)
+    if ("Us" %in% names(p) && !"us" %in% names(p)) p <- dplyr::rename(p, us = Us)
     if ("nom" %in% names(p)) {
       p$nom <- sub("d'Axirivall", "d'Aixirivall", p$nom, fixed = TRUE)
       p$nom <- sub("Parc infantil Camp de Perot", "Parc Infantil Camp de Perot", p$nom, fixed = TRUE)

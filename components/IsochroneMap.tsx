@@ -28,11 +28,26 @@ function emptyFc(): FeatureCollection {
   return { type: 'FeatureCollection', features: [] }
 }
 
+function propString(f: Feature, ...keys: string[]): string | undefined {
+  const p = f.properties || {}
+  for (const key of keys) {
+    const value = p[key]
+    if (value !== undefined && value !== null) return String(value)
+  }
+}
+
+function featureName(f: Feature): string | undefined {
+  return propString(f, 'nom', 'Nom')
+}
+
+function featureCategory(f: Feature): string | undefined {
+  return propString(f, 'us', 'Us')
+}
+
 function destinationFilter(destination: string, category: string) {
   return (f: Feature) => {
-    const p = f.properties || {}
-    if (category !== 'TOTS' && destination === '_CAT_') return p.us === category
-    return p.nom === destination
+    if (category !== 'TOTS' && destination === '_CAT_') return featureCategory(f) === category
+    return featureName(f) === destination
   }
 }
 
@@ -93,6 +108,24 @@ export function IsochroneMap({
           }
         })
       }
+      if (espaisPolygons) {
+        map.addSource('espais-polygons', { type: 'geojson', data: espaisPolygons })
+        map.addLayer({
+          id: 'espais-polygons',
+          type: 'fill',
+          source: 'espais-polygons',
+          paint: { 'fill-color': config.colors.espais, 'fill-opacity': 0.22, 'fill-outline-color': config.colors.espais }
+        })
+      }
+      if (aparcaments) {
+        map.addSource('aparcaments', { type: 'geojson', data: aparcaments })
+        map.addLayer({
+          id: 'aparcaments',
+          type: 'fill',
+          source: 'aparcaments',
+          paint: { 'fill-color': config.colors.aparcaments, 'fill-opacity': 0.35, 'fill-outline-color': config.colors.aparcaments }
+        })
+      }
       map.addSource('equipaments', { type: 'geojson', data: equipaments })
       map.addLayer({
         id: 'equipaments',
@@ -117,24 +150,6 @@ export function IsochroneMap({
           'circle-stroke-width': 1
         }
       })
-      if (espaisPolygons) {
-        map.addSource('espais-polygons', { type: 'geojson', data: espaisPolygons })
-        map.addLayer({
-          id: 'espais-polygons',
-          type: 'fill',
-          source: 'espais-polygons',
-          paint: { 'fill-color': config.colors.espais, 'fill-opacity': 0.22, 'fill-outline-color': config.colors.espais }
-        })
-      }
-      if (aparcaments) {
-        map.addSource('aparcaments', { type: 'geojson', data: aparcaments })
-        map.addLayer({
-          id: 'aparcaments',
-          type: 'fill',
-          source: 'aparcaments',
-          paint: { 'fill-color': config.colors.aparcaments, 'fill-opacity': 0.35, 'fill-outline-color': config.colors.aparcaments }
-        })
-      }
       map.addSource('selected', { type: 'geojson', data: emptyFc() })
       map.addLayer({
         id: 'selected-fill',
@@ -154,8 +169,9 @@ export function IsochroneMap({
       for (const layerId of ['equipaments', 'espais-entrades', 'espais-polygons']) {
         if (!map.getLayer(layerId)) continue
         map.on('click', layerId, e => {
-          const name = e.features?.[0]?.properties?.nom
-          if (name) onSelectDestination(String(name))
+          const feature = e.features?.[0]
+          const name = feature ? featureName(feature) : undefined
+          if (name) onSelectDestination(name)
         })
         map.on('mouseenter', layerId, () => { map.getCanvas().style.cursor = 'pointer' })
         map.on('mouseleave', layerId, () => { map.getCanvas().style.cursor = '' })
@@ -179,13 +195,13 @@ export function IsochroneMap({
     }
     const selectedPieces: Feature<Geometry>[] = []
     if (category !== 'TOTS' && destination === '_CAT_') {
-      selectedPieces.push(...filterFeatures(equipaments, f => f.properties?.us === category).features as Feature<Geometry>[])
-      selectedPieces.push(...filterFeatures(espaisEntrades, f => f.properties?.us === category).features as Feature<Geometry>[])
-      if (espaisPolygons) selectedPieces.push(...filterFeatures(espaisPolygons, f => f.properties?.us === category || selectedIso.features.some(x => x.properties?.nom === f.properties?.nom)).features as Feature<Geometry>[])
+      selectedPieces.push(...filterFeatures(equipaments, f => featureCategory(f) === category).features as Feature<Geometry>[])
+      selectedPieces.push(...filterFeatures(espaisEntrades, f => featureCategory(f) === category).features as Feature<Geometry>[])
+      if (espaisPolygons) selectedPieces.push(...filterFeatures(espaisPolygons, f => featureCategory(f) === category || selectedIso.features.some(x => featureName(x) === featureName(f))).features as Feature<Geometry>[])
     } else {
-      selectedPieces.push(...filterFeatures(equipaments, f => f.properties?.nom === destination).features as Feature<Geometry>[])
-      selectedPieces.push(...filterFeatures(espaisEntrades, f => f.properties?.nom === destination).features as Feature<Geometry>[])
-      if (espaisPolygons) selectedPieces.push(...filterFeatures(espaisPolygons, f => f.properties?.nom === destination).features as Feature<Geometry>[])
+      selectedPieces.push(...filterFeatures(equipaments, f => featureName(f) === destination).features as Feature<Geometry>[])
+      selectedPieces.push(...filterFeatures(espaisEntrades, f => featureName(f) === destination).features as Feature<Geometry>[])
+      if (espaisPolygons) selectedPieces.push(...filterFeatures(espaisPolygons, f => featureName(f) === destination).features as Feature<Geometry>[])
     }
     const selectedFc: FeatureCollection = { type: 'FeatureCollection', features: selectedPieces }
     ;(map.getSource('selected') as maplibregl.GeoJSONSource | undefined)?.setData(selectedFc)
