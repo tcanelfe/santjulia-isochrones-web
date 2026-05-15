@@ -27,7 +27,33 @@ script_dir <- if (length(file_arg)) {
   normalizePath("scripts", mustWork = TRUE)
 }
 PROTO_DIR <- normalizePath(file.path(script_dir, ".."), mustWork = TRUE)
-V6_DIR <- normalizePath(file.path(PROTO_DIR, "..", "v6"), mustWork = TRUE)
+
+# The web repo may be cloned outside the Isochrones/ folder (for example ~/dev).
+# Prefer an explicit environment variable, then fall back to the original sibling
+# layout used during local prototype development.
+V6_DIR_ENV <- Sys.getenv("SANTJULIA_V6_DIR", unset = "")
+V6_CANDIDATES <- c(
+  V6_DIR_ENV,
+  file.path(PROTO_DIR, "..", "v6"),
+  file.path(PROTO_DIR, "..", "Isochrones", "v6")
+)
+V6_CANDIDATES <- V6_CANDIDATES[nzchar(V6_CANDIDATES)]
+V6_DIR <- NULL
+for (candidate in V6_CANDIDATES) {
+  candidate_norm <- normalizePath(candidate, mustWork = FALSE)
+  if (file.exists(file.path(candidate_norm, "shiny_app", "export_static_map.R")) &&
+      file.exists(file.path(candidate_norm, "R", "constants.R"))) {
+    V6_DIR <- candidate_norm
+    break
+  }
+}
+if (is.null(V6_DIR)) {
+  stop(
+    "Cannot locate the Sant Julia v6 folder. Run with the real path, for example:\n",
+    'SANTJULIA_V6_DIR="/path/to/Isochrones/v6" npm run export:png'
+  )
+}
+message("Using v6 directory: ", V6_DIR)
 DATA_DIR <- file.path(PROTO_DIR, "public", "data")
 EXPORT_DIR <- file.path(PROTO_DIR, "public", "exports")
 dir.create(EXPORT_DIR, recursive = TRUE, showWarnings = FALSE)
