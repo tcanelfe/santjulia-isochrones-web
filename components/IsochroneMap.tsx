@@ -215,7 +215,12 @@ export function IsochroneMap({
         map.on('click', layerId, e => {
           const feature = e.features?.[0]
           const name = feature ? featureName(feature) : undefined
-          if (name) onSelectDestination(name)
+          if (!name) return
+          new maplibregl.Popup({ closeButton: false, closeOnClick: true, offset: 8 })
+            .setLngLat(e.lngLat)
+            .setText(name)
+            .addTo(map)
+          onSelectDestination(name)
         })
         map.on('mouseenter', layerId, () => { map.getCanvas().style.cursor = 'pointer' })
         map.on('mouseleave', layerId, () => { map.getCanvas().style.cursor = '' })
@@ -246,13 +251,13 @@ export function IsochroneMap({
 
     const selectedPieces: Feature<Geometry>[] = []
     if (category !== 'TOTS' && destination === '_CAT_') {
-      if (visibleLayers.equipaments) selectedPieces.push(...filterFeatures(equipaments, f => featureCategory(f) === category).features as Feature<Geometry>[])
-      if (visibleLayers.espaisEntrades) selectedPieces.push(...filterFeatures(espaisEntrades, f => featureCategory(f) === category).features as Feature<Geometry>[])
-      if (visibleLayers.espaisPolygons && espaisPolygons) selectedPieces.push(...filterFeatures(espaisPolygons, f => featureCategory(f) === category || selectedIso.features.some(x => featureName(x) === featureName(f))).features as Feature<Geometry>[])
+      selectedPieces.push(...filterFeatures(equipaments, f => featureCategory(f) === category).features as Feature<Geometry>[])
+      if (espaisPolygons) selectedPieces.push(...filterFeatures(espaisPolygons, f => featureCategory(f) === category || selectedIso.features.some(x => featureName(x) === featureName(f))).features as Feature<Geometry>[])
+      if (!espaisPolygons) selectedPieces.push(...filterFeatures(espaisEntrades, f => featureCategory(f) === category).features as Feature<Geometry>[])
     } else {
-      if (visibleLayers.equipaments) selectedPieces.push(...filterFeatures(equipaments, f => featureName(f) === destination).features as Feature<Geometry>[])
-      if (visibleLayers.espaisEntrades) selectedPieces.push(...filterFeatures(espaisEntrades, f => featureName(f) === destination).features as Feature<Geometry>[])
-      if (visibleLayers.espaisPolygons && espaisPolygons) selectedPieces.push(...filterFeatures(espaisPolygons, f => featureName(f) === destination).features as Feature<Geometry>[])
+      selectedPieces.push(...filterFeatures(equipaments, f => featureName(f) === destination).features as Feature<Geometry>[])
+      if (espaisPolygons) selectedPieces.push(...filterFeatures(espaisPolygons, f => featureName(f) === destination).features as Feature<Geometry>[])
+      if (!espaisPolygons) selectedPieces.push(...filterFeatures(espaisEntrades, f => featureName(f) === destination).features as Feature<Geometry>[])
     }
     const selectedFc: FeatureCollection = { type: 'FeatureCollection', features: selectedPieces }
     ;(map.getSource('selected') as maplibregl.GeoJSONSource | undefined)?.setData(selectedFc)
@@ -262,7 +267,7 @@ export function IsochroneMap({
     map.setLayoutProperty('base-satellite', 'visibility', baseLayer === 'satellite' ? 'visible' : 'none')
 
     map.setLayoutProperty('equipaments', 'visibility', visibleLayers.equipaments ? 'visible' : 'none')
-    map.setLayoutProperty('espais-entrades', 'visibility', visibleLayers.espaisEntrades ? 'visible' : 'none')
+    map.setLayoutProperty('espais-entrades', 'visibility', 'none')
     if (map.getLayer('espais-polygons')) map.setLayoutProperty('espais-polygons', 'visibility', visibleLayers.espaisPolygons ? 'visible' : 'none')
     if (map.getLayer('aparcaments')) map.setLayoutProperty('aparcaments', 'visibility', visibleLayers.aparcaments ? 'visible' : 'none')
 
@@ -271,29 +276,30 @@ export function IsochroneMap({
 
   const visibleDestinationLegend = [
     visibleLayers.equipaments && ['Equipaments', config.colors.equipaments, 'circle'],
-    (visibleLayers.espaisEntrades || visibleLayers.espaisPolygons) && ['Espais lliures', config.colors.espais, 'square'],
+    visibleLayers.espaisPolygons && ['Espais lliures', config.colors.espais, 'square'],
     visibleLayers.aparcaments && ['Aparcaments', config.colors.aparcaments, 'square']
   ].filter(Boolean) as string[][]
 
   return (
     <div className="map-wrap">
       <div ref={elRef} className="map-canvas"><div className="map-loading">Carregant mapa…</div></div>
-      <div className="map-floating-control map-base-control" aria-label="Mapa base">
-        {([
-          ['light', 'Clar'],
-          ['osm', 'OSM'],
-          ['satellite', 'Satèl·lit']
-        ] as Array<[MapBaseLayer, string]>).map(([id, label]) => (
-          <button key={id} type="button" className={baseLayer === id ? 'mini-toggle active' : 'mini-toggle'} onClick={() => onBaseLayer(id)}>{label}</button>
-        ))}
-      </div>
       <div className="map-floating-control map-layer-control" aria-label="Capes del mapa">
+        <div className="map-control-title">Mapa base</div>
+        <div className="map-base-row">
+          {([
+            ['light', 'Clar'],
+            ['osm', 'OSM'],
+            ['satellite', 'Satèl·lit']
+          ] as Array<[MapBaseLayer, string]>).map(([id, label]) => (
+            <button key={id} type="button" className={baseLayer === id ? 'mini-toggle active' : 'mini-toggle'} onClick={() => onBaseLayer(id)}>{label}</button>
+          ))}
+        </div>
+        <div className="mini-divider" />
         <div className="map-control-title">Capes</div>
         {([
           ['isochrones', 'Isòcrones'],
           ['equipaments', 'Equipaments'],
-          ['espaisEntrades', 'Entrades'],
-          ['espaisPolygons', 'Polígons'],
+          ['espaisPolygons', 'Espais lliures'],
           ['aparcaments', 'Aparcaments']
         ] as Array<[keyof MapLayerVisibility, string]>).map(([id, label]) => (
           <label className="map-check-row" key={id}>
