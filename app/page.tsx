@@ -12,7 +12,7 @@ const IsochroneMap = dynamic(() => import('@/components/IsochroneMap').then(m =>
 const DEFAULT_VISIBLE_LAYERS: MapLayerVisibility = {
   isochrones: true,
   equipaments: true,
-  espaisEntrades: true,
+  espaisEntrades: false,
   espaisPolygons: true,
   aparcaments: true
 }
