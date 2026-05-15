@@ -1,6 +1,15 @@
 import type { FeatureCollection } from 'geojson'
 
 export type ScenarioId = 'everyone' | 'older_adults' | 'children_0_12'
+export type IsochroneBand = 5 | 10 | 15
+
+export type MapLayerVisibility = {
+  isochrones: boolean
+  equipaments: boolean
+  espaisEntrades: boolean
+  espaisPolygons: boolean
+  aparcaments: boolean
+}
 
 export type Scenario = {
   id: ScenarioId
@@ -23,7 +32,7 @@ export type CoverageRow = {
   nom?: string
   us?: string
   escenari: ScenarioId
-  banda_min: 5 | 10 | 15
+  banda_min: IsochroneBand
   persones: number
   dones: number
   homes: number

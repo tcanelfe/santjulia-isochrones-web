@@ -5,10 +5,18 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controls } from '@/components/Controls'
 import { CoveragePanel } from '@/components/CoveragePanel'
 import { KpiCards } from '@/components/KpiCards'
+import { LayerControls } from '@/components/LayerControls'
 import { loadWebData } from '@/lib/data'
-import type { CoverageRow, ScenarioId, WebData } from '@/lib/types'
+import type { CoverageRow, IsochroneBand, MapLayerVisibility, ScenarioId, WebData } from '@/lib/types'
 
 const IsochroneMap = dynamic(() => import('@/components/IsochroneMap').then(m => m.IsochroneMap), { ssr: false })
+const DEFAULT_VISIBLE_LAYERS: MapLayerVisibility = {
+  isochrones: true,
+  equipaments: true,
+  espaisEntrades: true,
+  espaisPolygons: true,
+  aparcaments: true
+}
 
 function activeCoverage(data: WebData, scenario: ScenarioId, category: string, destination: string): CoverageRow[] {
   if (category !== 'TOTS' && destination === '_CAT_') {
@@ -24,6 +32,8 @@ export default function Page() {
   const [destType, setDestType] = useState('TOTS')
   const [category, setCategory] = useState('TOTS')
   const [destination, setDestination] = useState('')
+  const [visibleLayers, setVisibleLayers] = useState<MapLayerVisibility>(DEFAULT_VISIBLE_LAYERS)
+  const [visibleBands, setVisibleBands] = useState<IsochroneBand[]>([5, 10, 15])
 
   useEffect(() => {
     loadWebData()
@@ -57,6 +67,15 @@ export default function Page() {
   // declared before any early return so hook order stays constant.
   const handleDestType = useCallback((v: string) => { setDestType(v); setCategory('TOTS') }, [])
   const handleSelectDestination = useCallback((name: string) => { setCategory('TOTS'); setDestination(name) }, [])
+  const handleToggleLayer = useCallback((layer: keyof MapLayerVisibility) => {
+    setVisibleLayers(prev => ({ ...prev, [layer]: !prev[layer] }))
+  }, [])
+  const handleToggleBand = useCallback((band: IsochroneBand) => {
+    setVisibleBands(prev => {
+      const next = prev.includes(band) ? prev.filter(b => b !== band) : [...prev, band]
+      return next.sort((a, b) => a - b)
+    })
+  }, [])
 
   if (error) {
     return <main className="app-page"><div className="cardish">No s'han pogut carregar les dades web: {error}<br />Executa primer <code>npm run export:data</code> quan R estigui disponible.</div></main>
@@ -92,6 +111,13 @@ export default function Page() {
           onCategory={setCategory}
           onDestination={setDestination}
         />
+        <LayerControls
+          bands={data.config.bands.filter((b): b is IsochroneBand => b === 5 || b === 10 || b === 15)}
+          visibleBands={visibleBands}
+          visibleLayers={visibleLayers}
+          onToggleBand={handleToggleBand}
+          onToggleLayer={handleToggleLayer}
+        />
         <CoveragePanel title={coverageTitle} rows={coverageRows} />
         <section className="main-panel">
           <KpiCards rows={coverageRows} bandColors={data.config.bandColors} />
@@ -107,6 +133,8 @@ export default function Page() {
               scenario={scenario}
               destination={destination}
               category={category}
+              visibleBands={visibleBands}
+              visibleLayers={visibleLayers}
               onSelectDestination={handleSelectDestination}
             />
           </div>
