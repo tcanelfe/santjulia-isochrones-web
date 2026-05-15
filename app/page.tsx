@@ -138,7 +138,7 @@ export default function Page() {
     return <main className="app-page"><div className="cardish">No s'han pogut carregar les dades web: {error}<br />Executa primer <code>npm run export:data</code> quan R estigui disponible.</div></main>
   }
   if (!data || !destination) {
-    return <main className="app-page"><div className="cardish">Carregant prototip…</div></main>
+    return <main className="app-page"><div className="cardish">Carregant mapa…</div></main>
   }
 
   const coverageRows = activeCoverage(data, scenario, category, destination)
@@ -220,6 +220,7 @@ export default function Page() {
           {data.scenarios.map(s => <span key={s.id}>{s.label}: {s.note}.<br /></span>)}
           <br />
           <span style={{ color: '#667685' }}>Cens: {data.scenarios[0] ? data.scenarios[0].denominator.toLocaleString('ca-AD') : '—'} persones · 0–12: {data.scenarios.find(s => s.id === 'children_0_12')?.denominator.toLocaleString('ca-AD') || '—'} · 65+: {data.scenarios.find(s => s.id === 'older_adults')?.denominator.toLocaleString('ca-AD') || '—'}</span>
+          <p className="method-note">Les isòcrones representen accessibilitat potencial a peu segons la xarxa i els supòsits de velocitat; no incorporen condicions reals de seguretat, confort o estat del carrer.</p>
           <div className="logo-strip">
             <img src="/logos/logo_carlemany.png" alt="Universitat Carlemany" />
             <img src="/logos/logo_santjulia.png" alt="Sant Julià de Lòria" />

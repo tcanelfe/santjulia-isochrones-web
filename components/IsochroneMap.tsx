@@ -277,14 +277,14 @@ export function IsochroneMap({
           const { rows, label } = coverageRef.current
           const row = rows.find(r => r.banda_min === b)
           if (!row) return
-          const persones = Number(row.persones || 0)
+          const value = Number(row.value || 0)
           const pct = Number.isFinite(row.percentatge) ? row.percentatge.toFixed(1) : '—'
           const html = `
             <div class="map-popup">
               <div class="map-popup-title">${escapeHtml(label)}</div>
               <div class="map-popup-band">${b} min a peu</div>
-              <div class="map-popup-stat"><strong>${persones.toLocaleString('ca-AD')}</strong> persones</div>
-              <div class="map-popup-pct">${pct}% del total</div>
+              <div class="map-popup-stat"><strong>${value.toLocaleString('ca-AD')}</strong> persones</div>
+              <div class="map-popup-pct">${pct}% de l'univers seleccionat</div>
             </div>`
           new maplibregl.Popup({ closeButton: true, closeOnClick: true, offset: 4, maxWidth: '240px' })
             .setLngLat(e.lngLat)
