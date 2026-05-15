@@ -2,6 +2,7 @@ import type { FeatureCollection } from 'geojson'
 
 export type ScenarioId = 'everyone' | 'older_adults' | 'children_0_12'
 export type IsochroneBand = 5 | 10 | 15
+export type MapBaseLayer = 'light' | 'osm' | 'satellite'
 
 export type MapLayerVisibility = {
   isochrones: boolean
