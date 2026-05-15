@@ -7,7 +7,7 @@ import { CoveragePanel } from '@/components/CoveragePanel'
 import { KpiCards } from '@/components/KpiCards'
 import { LayerControls } from '@/components/LayerControls'
 import { loadWebData } from '@/lib/data'
-import type { CoverageRow, IsochroneBand, MapLayerVisibility, ScenarioId, WebData } from '@/lib/types'
+import type { CoverageRow, IsochroneBand, MapBaseLayer, MapLayerVisibility, ScenarioId, WebData } from '@/lib/types'
 
 const IsochroneMap = dynamic(() => import('@/components/IsochroneMap').then(m => m.IsochroneMap), { ssr: false })
 const DEFAULT_VISIBLE_LAYERS: MapLayerVisibility = {
@@ -34,6 +34,7 @@ export default function Page() {
   const [destination, setDestination] = useState('')
   const [visibleLayers, setVisibleLayers] = useState<MapLayerVisibility>(DEFAULT_VISIBLE_LAYERS)
   const [visibleBands, setVisibleBands] = useState<IsochroneBand[]>([5, 10, 15])
+  const [baseLayer, setBaseLayer] = useState<MapBaseLayer>('light')
 
   useEffect(() => {
     loadWebData()
@@ -118,7 +119,7 @@ export default function Page() {
           onToggleBand={handleToggleBand}
           onToggleLayer={handleToggleLayer}
         />
-        <CoveragePanel title={coverageTitle} rows={coverageRows} />
+        <CoveragePanel title={coverageTitle} rows={coverageRows} scenario={scenario} />
         <section className="main-panel">
           <KpiCards rows={coverageRows} bandColors={data.config.bandColors} />
           <div className="map-card">
@@ -135,6 +136,10 @@ export default function Page() {
               category={category}
               visibleBands={visibleBands}
               visibleLayers={visibleLayers}
+              baseLayer={baseLayer}
+              onBaseLayer={setBaseLayer}
+              onToggleBand={handleToggleBand}
+              onToggleLayer={handleToggleLayer}
               onSelectDestination={handleSelectDestination}
             />
           </div>
@@ -148,7 +153,11 @@ export default function Page() {
           <strong>Zones blaves</strong>: isòcrones de 5, 10 i 15 minuts. El blau fosc és més proper.<br />
           <span className="legend-dot" style={{ background: data.config.colors.equipaments }} />Equipament&nbsp;&nbsp;
           <span className="legend-dot" style={{ background: data.config.colors.espais, borderRadius: 2 }} />Espai lliure&nbsp;&nbsp;
-          <span className="legend-dot" style={{ background: data.config.colors.aparcaments, borderRadius: 2 }} />Aparcament
+          <span className="legend-dot" style={{ background: data.config.colors.aparcaments, borderRadius: 2 }} />Aparcament<br /><br />
+          <strong>Escenaris</strong><br />
+          {data.scenarios.map(s => <span key={s.id}>{s.label}: {s.note}.<br /></span>)}
+          <br />
+          <span style={{ color: '#667685' }}>Cens: {data.scenarios[0] ? data.scenarios[0].denominator.toLocaleString('ca-AD') : '—'} persones · 0–12: {data.scenarios.find(s => s.id === 'children_0_12')?.denominator.toLocaleString('ca-AD') || '—'} · 65+: {data.scenarios.find(s => s.id === 'older_adults')?.denominator.toLocaleString('ca-AD') || '—'}</span>
           <div className="logo-strip">
             <img src="/logos/logo_carlemany.png" alt="Universitat Carlemany" />
             <img src="/logos/logo_santjulia.png" alt="Sant Julià de Lòria" />

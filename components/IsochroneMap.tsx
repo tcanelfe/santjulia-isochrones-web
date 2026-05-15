@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import maplibregl, { Map } from 'maplibre-gl'
 import bbox from '@turf/bbox'
 import type { Feature, FeatureCollection, Geometry } from 'geojson'
-import type { IsochroneBand, MapLayerVisibility, ScenarioId, WebConfig } from '@/lib/types'
+import type { IsochroneBand, MapBaseLayer, MapLayerVisibility, ScenarioId, WebConfig } from '@/lib/types'
 
 type Props = {
   config: WebConfig
@@ -19,6 +19,10 @@ type Props = {
   category: string
   visibleBands: IsochroneBand[]
   visibleLayers: MapLayerVisibility
+  baseLayer: MapBaseLayer
+  onBaseLayer: (layer: MapBaseLayer) => void
+  onToggleBand: (band: IsochroneBand) => void
+  onToggleLayer: (layer: keyof MapLayerVisibility) => void
   onSelectDestination: (name: string) => void
 }
 
@@ -66,6 +70,10 @@ export function IsochroneMap({
   category,
   visibleBands,
   visibleLayers,
+  baseLayer,
+  onBaseLayer,
+  onToggleBand,
+  onToggleLayer,
   onSelectDestination
 }: Props) {
   const elRef = useRef<HTMLDivElement | null>(null)
@@ -82,14 +90,30 @@ export function IsochroneMap({
       style: {
         version: 8,
         sources: {
-          positron: {
+          light: {
             type: 'raster',
             tiles: ['https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', 'https://b.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'],
             tileSize: 256,
             attribution: '© OpenStreetMap © CARTO'
+          },
+          osm: {
+            type: 'raster',
+            tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', 'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: '© OpenStreetMap contributors'
+          },
+          satellite: {
+            type: 'raster',
+            tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+            tileSize: 256,
+            attribution: 'Tiles © Esri'
           }
         },
-        layers: [{ id: 'positron', type: 'raster', source: 'positron' }]
+        layers: [
+          { id: 'base-light', type: 'raster', source: 'light' },
+          { id: 'base-osm', type: 'raster', source: 'osm', layout: { visibility: 'none' } },
+          { id: 'base-satellite', type: 'raster', source: 'satellite', layout: { visibility: 'none' } }
+        ]
       },
       center: [1.491, 42.464],
       zoom: 14,
@@ -214,6 +238,10 @@ export function IsochroneMap({
     const selectedFc: FeatureCollection = { type: 'FeatureCollection', features: selectedPieces }
     ;(map.getSource('selected') as maplibregl.GeoJSONSource | undefined)?.setData(selectedFc)
 
+    map.setLayoutProperty('base-light', 'visibility', baseLayer === 'light' ? 'visible' : 'none')
+    map.setLayoutProperty('base-osm', 'visibility', baseLayer === 'osm' ? 'visible' : 'none')
+    map.setLayoutProperty('base-satellite', 'visibility', baseLayer === 'satellite' ? 'visible' : 'none')
+
     map.setLayoutProperty('equipaments', 'visibility', visibleLayers.equipaments ? 'visible' : 'none')
     map.setLayoutProperty('espais-entrades', 'visibility', visibleLayers.espaisEntrades ? 'visible' : 'none')
     if (map.getLayer('espais-polygons')) map.setLayoutProperty('espais-polygons', 'visibility', visibleLayers.espaisPolygons ? 'visible' : 'none')
@@ -224,7 +252,61 @@ export function IsochroneMap({
       map.fitBounds([[minX, minY], [maxX, maxY]], { padding: 40, duration: 550 })
     }
     setTimeout(() => map.resize(), 50)
-  }, [category, destination, equipaments, espaisEntrades, espaisPolygons, isochrones, isochronesByCategory, scenario, visibleBands, visibleLayers, mapReady])
+  }, [baseLayer, category, destination, equipaments, espaisEntrades, espaisPolygons, isochrones, isochronesByCategory, scenario, visibleBands, visibleLayers, mapReady])
 
-  return <div ref={elRef} className="map-wrap"><div className="map-loading">Carregant mapa…</div></div>
+  const visibleDestinationLegend = [
+    visibleLayers.equipaments && ['Equipaments', config.colors.equipaments, 'circle'],
+    (visibleLayers.espaisEntrades || visibleLayers.espaisPolygons) && ['Espais lliures', config.colors.espais, 'square'],
+    visibleLayers.aparcaments && ['Aparcaments', config.colors.aparcaments, 'square']
+  ].filter(Boolean) as string[][]
+
+  return (
+    <div className="map-wrap">
+      <div ref={elRef} className="map-canvas"><div className="map-loading">Carregant mapa…</div></div>
+      <div className="map-floating-control map-base-control" aria-label="Mapa base">
+        {([
+          ['light', 'Clar'],
+          ['osm', 'OSM'],
+          ['satellite', 'Satèl·lit']
+        ] as Array<[MapBaseLayer, string]>).map(([id, label]) => (
+          <button key={id} type="button" className={baseLayer === id ? 'mini-toggle active' : 'mini-toggle'} onClick={() => onBaseLayer(id)}>{label}</button>
+        ))}
+      </div>
+      <div className="map-floating-control map-layer-control" aria-label="Capes del mapa">
+        <div className="map-control-title">Capes</div>
+        {([
+          ['isochrones', 'Isòcrones'],
+          ['equipaments', 'Equipaments'],
+          ['espaisEntrades', 'Entrades'],
+          ['espaisPolygons', 'Polígons'],
+          ['aparcaments', 'Aparcaments']
+        ] as Array<[keyof MapLayerVisibility, string]>).map(([id, label]) => (
+          <label className="map-check-row" key={id}>
+            <input type="checkbox" checked={visibleLayers[id]} onChange={() => onToggleLayer(id)} />
+            <span>{label}</span>
+          </label>
+        ))}
+        <div className="mini-divider" />
+        <div className="map-band-row">
+          {([5, 10, 15] as IsochroneBand[]).map(band => (
+            <button key={band} type="button" className={visibleBands.includes(band) ? 'mini-toggle active' : 'mini-toggle'} onClick={() => onToggleBand(band)}>{band}'</button>
+          ))}
+        </div>
+      </div>
+      <div className="map-floating-control map-legend">
+        <div className="map-control-title">Temps a peu</div>
+        {([5, 10, 15] as IsochroneBand[]).map(band => (
+          <div className="legend-row" key={band}>
+            <span className="legend-swatch square" style={{ background: config.bandColors[String(band)] }} />{band} min
+          </div>
+        ))}
+        {visibleDestinationLegend.length > 0 && <div className="mini-divider" />}
+        {visibleDestinationLegend.map(([label, color, shape]) => (
+          <div className="legend-row" key={label}>
+            <span className={`legend-swatch ${shape}`} style={{ background: color }} />{label}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }
