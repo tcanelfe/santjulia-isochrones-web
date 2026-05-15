@@ -41,11 +41,66 @@ export default function Page() {
     loadWebData()
       .then(d => {
         setData(d)
-        setScenario((d.scenarios[0]?.id || 'everyone') as ScenarioId)
-        setDestination(d.destinations[0]?.nom || '')
+        // Hydrate state from URL params if present, else fall back to defaults.
+        // Validation happens against the loaded data so we never restore a
+        // destination/scenario that has been removed since the link was shared.
+        const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
+        const validScenarios = new Set(d.scenarios.map(s => s.id))
+        const urlScenario = params?.get('scenario')
+        setScenario(urlScenario && validScenarios.has(urlScenario as ScenarioId)
+          ? (urlScenario as ScenarioId)
+          : ((d.scenarios[0]?.id || 'everyone') as ScenarioId))
+
+        const urlDestType = params?.get('destType')
+        if (urlDestType === 'equipament' || urlDestType === 'espai_lliure' || urlDestType === 'TOTS') {
+          setDestType(urlDestType)
+        }
+
+        const urlCategory = params?.get('category') || 'TOTS'
+        const allCategories = new Set(d.destinations.map(x => x.us))
+        if (urlCategory === 'TOTS' || allCategories.has(urlCategory)) setCategory(urlCategory)
+
+        const urlDest = params?.get('dest')
+        const validDestNames = new Set(d.destinations.map(x => x.nom))
+        if (urlDest === '_CAT_' && urlCategory !== 'TOTS') {
+          setDestination('_CAT_')
+        } else if (urlDest && validDestNames.has(urlDest)) {
+          setDestination(urlDest)
+        } else {
+          setDestination(d.destinations[0]?.nom || '')
+        }
+
+        const urlBase = params?.get('base')
+        if (urlBase === 'light' || urlBase === 'osm' || urlBase === 'satellite') setBaseLayer(urlBase)
+
+        const urlBands = params?.get('bands')
+        if (urlBands) {
+          const parsed = urlBands.split(',').map(Number).filter(n => n === 5 || n === 10 || n === 15) as IsochroneBand[]
+          if (parsed.length > 0) setVisibleBands(parsed.sort((a, b) => a - b))
+        }
       })
       .catch(e => setError(e instanceof Error ? e.message : String(e)))
   }, [])
+
+  // Mirror state to the URL so any view can be copy-pasted as a permalink.
+  // Uses replaceState (not pushState) so the browser back button keeps its
+  // usual semantics rather than scrolling through every filter tweak.
+  useEffect(() => {
+    if (!data || !destination || typeof window === 'undefined') return
+    const params = new URLSearchParams()
+    if (scenario !== 'everyone') params.set('scenario', scenario)
+    if (destType !== 'TOTS') params.set('destType', destType)
+    if (category !== 'TOTS') params.set('category', category)
+    if (destination) params.set('dest', destination)
+    if (baseLayer !== 'light') params.set('base', baseLayer)
+    const bandsKey = visibleBands.join(',')
+    if (bandsKey !== '5,10,15') params.set('bands', bandsKey)
+    const qs = params.toString()
+    const nextUrl = `${window.location.pathname}${qs ? `?${qs}` : ''}`
+    if (nextUrl !== window.location.pathname + window.location.search) {
+      window.history.replaceState(null, '', nextUrl)
+    }
+  }, [data, scenario, destType, category, destination, baseLayer, visibleBands])
 
   const filteredDests = useMemo(() => {
     if (!data) return []
