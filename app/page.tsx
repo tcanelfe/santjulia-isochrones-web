@@ -5,7 +5,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controls } from '@/components/Controls'
 import { CoveragePanel } from '@/components/CoveragePanel'
 import { KpiCards } from '@/components/KpiCards'
-import { LayerControls } from '@/components/LayerControls'
 import { loadWebData } from '@/lib/data'
 import type { CoverageRow, IsochroneBand, MapBaseLayer, MapLayerVisibility, ScenarioId, WebData } from '@/lib/types'
 
@@ -111,13 +110,6 @@ export default function Page() {
           onDestType={handleDestType}
           onCategory={setCategory}
           onDestination={setDestination}
-        />
-        <LayerControls
-          bands={data.config.bands.filter((b): b is IsochroneBand => b === 5 || b === 10 || b === 15)}
-          visibleBands={visibleBands}
-          visibleLayers={visibleLayers}
-          onToggleBand={handleToggleBand}
-          onToggleLayer={handleToggleLayer}
         />
         <CoveragePanel title={coverageTitle} rows={coverageRows} scenario={scenario} />
         <section className="main-panel">
