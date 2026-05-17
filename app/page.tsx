@@ -153,8 +153,8 @@ export default function Page() {
     <main className="app-page">
       <header className="app-header">
         <div>
-          <h1 className="app-title">Cobertura poblacional</h1>
-          <div className="app-subtitle">{data.config.projectLabel}</div>
+          <h1 className="app-title">Accessibilitat peatonal a equipaments parroquial</h1>
+          <div className="app-subtitle">Sant Julià de Lòria</div>
         </div>
         {data.config.dataVintage && (
           <div className="app-badge">Dades {data.config.dataVintage}</div>
