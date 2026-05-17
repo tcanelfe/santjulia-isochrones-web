@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
-const SITE_TITLE = 'Cobertura poblacional · Sant Julià de Lòria'
+const SITE_TITLE = 'Accessibilitat peatonal a equipaments parroquial · Sant Julià de Lòria'
 const SITE_DESCRIPTION = 'Mapa interactiu d\'accessibilitat a peu als equipaments i espais lliures de Sant Julià de Lòria. Isòcrones de 5, 10 i 15 minuts per a la població general, gent gran i infants.'
 
 export const metadata: Metadata = {

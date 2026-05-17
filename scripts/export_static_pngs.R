@@ -138,15 +138,52 @@ default_map_state <- list(
 
 manifest <- list()
 idx <- 1L
+
+# Detect a converter. We keep R producing PNG (the v6 exporter only knows PNG)
+# and recompress to JPG afterwards. JPG at q=90 is ~5x smaller than 300-DPI PNG
+# for these maps and visually indistinguishable. Prefer the magick R package if
+# available (cross-platform); fall back to the macOS-native `sips` CLI; else
+# keep PNG with a warning.
+has_magick <- requireNamespace("magick", quietly = TRUE)
+has_sips <- nchar(Sys.which("sips")) > 0
+if (has_magick) {
+  message("JPG conversion: magick R package")
+} else if (has_sips) {
+  message("JPG conversion: macOS sips CLI")
+} else {
+  warning("Neither magick R package nor sips CLI available — exports will stay as PNG.")
+}
+
+png_to_jpg <- function(png_path, jpg_path, quality = 90L) {
+  if (has_magick) {
+    img <- magick::image_read(png_path)
+    magick::image_write(img, path = jpg_path, format = "jpg", quality = quality)
+    return(TRUE)
+  }
+  if (has_sips) {
+    res <- suppressWarnings(system2(
+      "sips",
+      args = c("-s", "format", "jpeg", "-s", "formatOptions", as.character(quality),
+               shQuote(png_path), "--out", shQuote(jpg_path)),
+      stdout = FALSE, stderr = FALSE
+    ))
+    return(res == 0L)
+  }
+  FALSE
+}
+
 write_one <- function(scope, key, scenario_id, category_mode = FALSE) {
-  filename <- paste0(slug(key), "_", scenario_id, "_mapa.png")
-  if (scope == "category") filename <- paste0("categoria_", filename)
-  output_file <- file.path(EXPORT_DIR, filename)
-  message("PNG: ", scope, " | ", scenario_id, " | ", key)
+  base <- paste0(slug(key), "_", scenario_id, "_mapa")
+  if (scope == "category") base <- paste0("categoria_", base)
+  png_name <- paste0(base, ".png")
+  jpg_name <- paste0(base, ".jpg")
+  png_path <- file.path(EXPORT_DIR, png_name)
+  jpg_path <- file.path(EXPORT_DIR, jpg_name)
+  message("Export: ", scope, " | ", scenario_id, " | ", key)
   export_static_map(
     scenario = scenario_id,
     destination = key,
-    output_file = output_file,
+    output_file = png_path,
     dpi = 300,
     width_in = 13.5,
     height_in = 7.5,
@@ -162,11 +199,18 @@ write_one <- function(scope, key, scenario_id, category_mode = FALSE) {
     category_mode = category_mode,
     map_state = default_map_state
   )
+
+  final_name <- png_name
+  if (png_to_jpg(png_path, jpg_path)) {
+    file.remove(png_path)
+    final_name <- jpg_name
+  }
+
   manifest[[idx]] <<- list(
     scope = scope,
     key = key,
     scenario = scenario_id,
-    href = paste0("/exports/", filename)
+    href = paste0("/exports/", final_name)
   )
   idx <<- idx + 1L
 }
