@@ -14,6 +14,8 @@ type Props = {
   espaisEntrades: FeatureCollection
   espaisPolygons: FeatureCollection | null
   aparcaments: FeatureCollection | null
+  busInterparroquial: FeatureCollection | null
+  busComunal: FeatureCollection | null
   scenario: ScenarioId
   destination: string
   category: string
@@ -92,6 +94,8 @@ export function IsochroneMap({
   espaisEntrades,
   espaisPolygons,
   aparcaments,
+  busInterparroquial,
+  busComunal,
   scenario,
   destination,
   category,
@@ -220,6 +224,36 @@ export function IsochroneMap({
           'circle-stroke-width': 1
         }
       })
+      // Comunal-bus stops: display-only reference markers (no isochrones).
+      if (busComunal) {
+        map.addSource('bus-comunal', { type: 'geojson', data: busComunal })
+        map.addLayer({
+          id: 'bus-comunal',
+          type: 'circle',
+          source: 'bus-comunal',
+          paint: {
+            'circle-radius': 3.5,
+            'circle-color': config.colors.busComunal,
+            'circle-stroke-color': '#ffffff',
+            'circle-stroke-width': 1
+          }
+        })
+      }
+      // Interparish-bus stops: full destinations (clickable, carry isochrones).
+      if (busInterparroquial) {
+        map.addSource('bus-inter', { type: 'geojson', data: busInterparroquial })
+        map.addLayer({
+          id: 'bus-inter',
+          type: 'circle',
+          source: 'bus-inter',
+          paint: {
+            'circle-radius': 5,
+            'circle-color': config.colors.bus,
+            'circle-stroke-color': '#ffffff',
+            'circle-stroke-width': 1
+          }
+        })
+      }
       map.addSource('selected', { type: 'geojson', data: emptyFc() })
       map.addLayer({
         id: 'selected-fill',
@@ -253,18 +287,22 @@ export function IsochroneMap({
         }
       })
 
-      for (const layerId of ['equipaments', 'espais-entrades', 'espais-polygons', 'aparcaments']) {
+      // Layers that are display-only on click (show a label, never select).
+      const referenceOnly = new Set(['aparcaments', 'bus-comunal'])
+      for (const layerId of ['equipaments', 'espais-entrades', 'espais-polygons', 'aparcaments', 'bus-inter', 'bus-comunal']) {
         if (!map.getLayer(layerId)) continue
         map.on('click', layerId, e => {
           const feature = e.features?.[0]
           const name = feature ? featureName(feature) : undefined
-          const label = name || (layerId === 'aparcaments' ? 'Aparcament' : undefined)
+          const fallback = layerId === 'aparcaments' ? 'Aparcament'
+            : layerId === 'bus-comunal' ? 'Parada bus comunal' : undefined
+          const label = name || fallback
           if (!label) return
           new maplibregl.Popup({ closeButton: false, closeOnClick: true, offset: 8 })
             .setLngLat(e.lngLat)
             .setText(label)
             .addTo(map)
-          if (layerId !== 'aparcaments' && name) onSelectDestination(name)
+          if (!referenceOnly.has(layerId) && name) onSelectDestination(name)
         })
         map.on('mouseenter', layerId, () => { map.getCanvas().style.cursor = 'pointer' })
         map.on('mouseleave', layerId, () => { map.getCanvas().style.cursor = '' })
@@ -301,7 +339,7 @@ export function IsochroneMap({
     })
     mapRef.current = map
     return () => { map.remove(); mapRef.current = null; setMapReady(false) }
-  }, [aparcaments, config, equipaments, espaisEntrades, espaisPolygons, onSelectDestination])
+  }, [aparcaments, busComunal, busInterparroquial, config, equipaments, espaisEntrades, espaisPolygons, onSelectDestination])
 
   useEffect(() => {
     const map = mapRef.current
@@ -321,10 +359,12 @@ export function IsochroneMap({
     const selectedPieces: Feature<Geometry>[] = []
     if (category !== 'TOTS' && destination === '_CAT_') {
       selectedPieces.push(...filterFeatures(equipaments, f => featureCategory(f) === category).features as Feature<Geometry>[])
+      if (busInterparroquial) selectedPieces.push(...filterFeatures(busInterparroquial, f => featureCategory(f) === category).features as Feature<Geometry>[])
       if (espaisPolygons) selectedPieces.push(...filterFeatures(espaisPolygons, f => featureCategory(f) === category || selectedIso.features.some(x => featureName(x) === featureName(f))).features as Feature<Geometry>[])
       if (!espaisPolygons) selectedPieces.push(...filterFeatures(espaisEntrades, f => featureCategory(f) === category).features as Feature<Geometry>[])
     } else {
       selectedPieces.push(...filterFeatures(equipaments, f => featureName(f) === destination).features as Feature<Geometry>[])
+      if (busInterparroquial) selectedPieces.push(...filterFeatures(busInterparroquial, f => featureName(f) === destination).features as Feature<Geometry>[])
       if (espaisPolygons) selectedPieces.push(...filterFeatures(espaisPolygons, f => featureName(f) === destination).features as Feature<Geometry>[])
       if (!espaisPolygons) selectedPieces.push(...filterFeatures(espaisEntrades, f => featureName(f) === destination).features as Feature<Geometry>[])
     }
@@ -340,17 +380,21 @@ export function IsochroneMap({
     if (map.getLayer('espais-polygons')) map.setLayoutProperty('espais-polygons', 'visibility', visibleLayers.espaisPolygons ? 'visible' : 'none')
     if (map.getLayer('aparcaments')) map.setLayoutProperty('aparcaments', 'visibility', visibleLayers.aparcaments ? 'visible' : 'none')
     if (map.getLayer('aparcaments-line')) map.setLayoutProperty('aparcaments-line', 'visibility', visibleLayers.aparcaments ? 'visible' : 'none')
+    if (map.getLayer('bus-inter')) map.setLayoutProperty('bus-inter', 'visibility', visibleLayers.busInterparroquial ? 'visible' : 'none')
+    if (map.getLayer('bus-comunal')) map.setLayoutProperty('bus-comunal', 'visibility', visibleLayers.busComunal ? 'visible' : 'none')
 
-    for (const layerId of ['espais-polygons', 'aparcaments', 'aparcaments-line', 'equipaments', 'selected-fill', 'selected-point', 'selected-label']) {
+    for (const layerId of ['espais-polygons', 'aparcaments', 'aparcaments-line', 'equipaments', 'bus-comunal', 'bus-inter', 'selected-fill', 'selected-point', 'selected-label']) {
       if (map.getLayer(layerId)) map.moveLayer(layerId)
     }
 
     requestAnimationFrame(() => safeFitBounds(map, selectedVisibleIso))
-  }, [baseLayer, category, destination, equipaments, espaisEntrades, espaisPolygons, isochrones, isochronesByCategory, scenario, visibleBands, visibleLayers, mapReady])
+  }, [baseLayer, category, destination, equipaments, espaisEntrades, espaisPolygons, busInterparroquial, isochrones, isochronesByCategory, scenario, visibleBands, visibleLayers, mapReady])
 
   const visibleDestinationLegend = [
     visibleLayers.equipaments && ['Equipaments', config.colors.equipaments, 'circle'],
     visibleLayers.espaisPolygons && ['Espais lliures', config.colors.espais, 'square'],
+    visibleLayers.busInterparroquial && ['Bus interparroquial', config.colors.bus, 'circle'],
+    visibleLayers.busComunal && ['Bus comunal', config.colors.busComunal, 'circle'],
     visibleLayers.aparcaments && ['Aparcaments', config.colors.aparcaments, 'square']
   ].filter(Boolean) as string[][]
 
@@ -374,6 +418,8 @@ export function IsochroneMap({
           ['isochrones', 'Isòcrones'],
           ['equipaments', 'Equipaments'],
           ['espaisPolygons', 'Espais lliures'],
+          ['busInterparroquial', 'Bus interparroquial'],
+          ['busComunal', 'Bus comunal'],
           ['aparcaments', 'Aparcaments']
         ] as Array<[keyof MapLayerVisibility, string]>).map(([id, label]) => (
           <label className="map-check-row" key={id}>

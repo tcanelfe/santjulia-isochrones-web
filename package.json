@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "export:data": "Rscript scripts/export_web_data.R",
-    "export:png": "Rscript scripts/export_static_pngs.R"
+    "export:data": "LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 Rscript scripts/export_web_data.R",
+    "export:png": "LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 Rscript scripts/export_static_pngs.R"
   },
   "dependencies": {
     "@turf/bbox": "^7.2.0",
