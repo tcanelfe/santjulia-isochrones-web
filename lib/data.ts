@@ -1,5 +1,5 @@
 import type { FeatureCollection } from 'geojson'
-import type { CoverageRow, Destination, ExportManifestItem, PopulationTotals, Scenario, WebConfig, WebData } from './types'
+import type { AccessRow, CoverageRow, Destination, ExportManifestItem, PopulationTotals, Scenario, WebConfig, WebData } from './types'
 
 async function getJson<T>(path: string): Promise<T> {
   const res = await fetch(path)
@@ -20,6 +20,7 @@ export async function loadWebData(): Promise<WebData> {
     destinations,
     coverageDestination,
     coverageCategory,
+    coverageAccess,
     populationTotalsMaybe,
     exportManifest,
     isochrones,
@@ -27,13 +28,16 @@ export async function loadWebData(): Promise<WebData> {
     equipaments,
     espaisEntrades,
     espaisPolygonsMaybe,
-    aparcamentsMaybe
+    aparcamentsMaybe,
+    busInterparroquialMaybe,
+    busComunalMaybe
   ] = await Promise.all([
     getJson<WebConfig>('/data/config.json'),
     getJson<Scenario[]>('/data/scenarios.json'),
     getJson<Destination[]>('/data/destinations.json'),
     getJson<CoverageRow[]>('/data/coverage_by_destination.json'),
     getJson<CoverageRow[]>('/data/coverage_by_category.json'),
+    getOptionalJson<AccessRow[]>('/data/coverage_access.json', []),
     getOptionalJson<PopulationTotals | null>('/data/population_totals.json', null),
     getOptionalJson<ExportManifestItem[]>('/exports/manifest.json', []),
     getJson<FeatureCollection>('/data/layers/isochrones.geojson'),
@@ -41,7 +45,9 @@ export async function loadWebData(): Promise<WebData> {
     getJson<FeatureCollection>('/data/layers/equipaments.geojson'),
     getJson<FeatureCollection>('/data/layers/espais_entrades.geojson'),
     fetch('/data/layers/espais_polygons.geojson').then(r => r.ok ? r.json() : null),
-    fetch('/data/layers/aparcaments.geojson').then(r => r.ok ? r.json() : null)
+    fetch('/data/layers/aparcaments.geojson').then(r => r.ok ? r.json() : null),
+    fetch('/data/layers/bus_interparroquial.geojson').then(r => r.ok ? r.json() : null),
+    fetch('/data/layers/bus_comunal.geojson').then(r => r.ok ? r.json() : null)
   ])
 
   const everyone = scenarios.find(s => s.id === 'everyone')?.denominator || 0
@@ -63,6 +69,7 @@ export async function loadWebData(): Promise<WebData> {
     destinations,
     coverageDestination,
     coverageCategory,
+    coverageAccess,
     populationTotals,
     exportManifest,
     layers: {
@@ -71,7 +78,9 @@ export async function loadWebData(): Promise<WebData> {
       equipaments,
       espaisEntrades,
       espaisPolygons: espaisPolygonsMaybe,
-      aparcaments: aparcamentsMaybe
+      aparcaments: aparcamentsMaybe,
+      busInterparroquial: busInterparroquialMaybe,
+      busComunal: busComunalMaybe
     }
   }
 }

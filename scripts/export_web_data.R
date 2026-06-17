@@ -1,9 +1,16 @@
 # =============================================================================
 # export_web_data.R
 #
-# Creates browser-ready GeoJSON/JSON for the Sant Julià v6 web prototype.
-# This script reads ../v6 outputs but writes only inside v6_web_prototype/public/data.
-# It does not modify the Shiny app or any v6 source file.
+# Creates browser-ready GeoJSON/JSON for the Sant Julià web app.
+# Reads the v7 (slope-adjusted) analysis outputs and writes only inside
+# santjulia-isochrones-web/public/data. It does not modify any v7 source file.
+#
+# v7 update (2026-06): the analysis GPKG carries TWO models per scenario
+# (`baseline` and `slope_adjusted`). The web shows the slope_adjusted model.
+# It also adds interparish-bus stops as destinations, plus comunal-bus stops
+# and a per-destination 5-minute access summary (parkings + comunal bus).
+# Display-name overrides (Correos, Escola Andorrana, Sala de Vetlles) are
+# applied so the site matches the report.
 # =============================================================================
 
 required <- c("sf", "dplyr", "jsonlite")
@@ -26,7 +33,23 @@ script_dir <- if (length(file_arg)) {
   normalizePath("scripts", mustWork = TRUE)
 }
 PROTO_DIR <- normalizePath(file.path(script_dir, ".."), mustWork = TRUE)
-V6_DIR    <- normalizePath(file.path(PROTO_DIR, "..", "v6"), mustWork = TRUE)
+SRC_DIR    <- normalizePath(file.path(PROTO_DIR, "..", "v7"), mustWork = TRUE)
+# The slope-adjusted model is the one published in the report and shown on the web.
+WEB_MODEL <- "slope_adjusted"
+# Display-name overrides — keep the website in step with the report.
+NAME_OVERRIDES <- c(
+  "Escola andorra de loria"     = "Escola Andorrana",
+  "Escola Andorra de Loria"     = "Escola Andorrana",
+  "Sala de vetlles"             = "Sala de Vetlles",
+  "Local de Corrreu i La Poste" = "Correos"
+)
+apply_renames <- function(x) {
+  if (!is.null(x) && "nom" %in% names(x)) {
+    hit <- x$nom %in% names(NAME_OVERRIDES)
+    x$nom[hit] <- unname(NAME_OVERRIDES[x$nom[hit]])
+  }
+  x
+}
 DATA_OUT  <- file.path(PROTO_DIR, "public", "data")
 LAYERS_OUT <- file.path(DATA_OUT, "layers")
 QA_OUT <- file.path(DATA_OUT, "qa")
@@ -40,13 +63,15 @@ dir.create(QA_OUT, recursive = TRUE, showWarnings = FALSE)
 #   ring geometries as a separate layer in a later iteration.
 SIMPLIFY_TOLERANCE_M <- 1.5
 
-source(file.path(V6_DIR, "R", "constants.R"))
-source(file.path(V6_DIR, "R", "lib_population.R"))
+# export:data sets a UTF-8 locale (see package.json) so these Catalan labels
+# keep a proper UTF-8 mark; downstream normalise_text_cols() also NFC-normalises.
+source(file.path(SRC_DIR, "R", "constants.R"))
+source(file.path(SRC_DIR, "R", "lib_population.R"))
 
-ISO_PATH <- file.path(V6_DIR, "outputs", "isochrones.gpkg")
-POB_PATH <- file.path(V6_DIR, "data", "Poblacio_santju.gpkg")
-ESPAI_POLY_PATH <- file.path(V6_DIR, "data", "Espais lliures.gpkg")
-APARCAMENTS_PATH <- file.path(V6_DIR, "data", "Aparcaments.gpkg")
+ISO_PATH <- file.path(SRC_DIR, "outputs", "isochrones.gpkg")
+POB_PATH <- file.path(SRC_DIR, "data", "Poblacio_santju.gpkg")
+ESPAI_POLY_PATH <- file.path(SRC_DIR, "data", "Espais lliures.gpkg")
+APARCAMENTS_PATH <- file.path(SRC_DIR, "data", "Aparcaments.gpkg")
 
 write_json <- function(x, path) {
   jsonlite::write_json(x, path, dataframe = "rows", auto_unbox = TRUE,
@@ -81,14 +106,35 @@ write_geojson <- function(x, path, simplify = TRUE) {
   sf::st_write(sf::st_transform(x, 4326), path, driver = "GeoJSON", quiet = TRUE)
 }
 
-message("Reading v6 outputs...")
+message("Reading v7 outputs (model = ", WEB_MODEL, ")...")
 isochrones <- sf::st_read(ISO_PATH, layer = "isochrones", quiet = TRUE) |> sf::st_make_valid()
+# v7 carries baseline + slope_adjusted; keep only the published model so the
+# downstream counts/unions are not doubled.
+if ("model_id" %in% names(isochrones)) {
+  isochrones <- isochrones[isochrones$model_id == WEB_MODEL, , drop = FALSE]
+}
+stopifnot(nrow(isochrones) > 0)
 crs_analysis <- sf::st_crs(isochrones)
 equip <- sf::st_read(ISO_PATH, layer = "equipaments", quiet = TRUE) |> sf::st_transform(crs_analysis)
 espai_pts <- sf::st_read(ISO_PATH, layer = "espais_entrades", quiet = TRUE) |> sf::st_transform(crs_analysis)
 qa_origins <- sf::st_read(ISO_PATH, layer = "qa_origins", quiet = TRUE) |> sf::st_transform(crs_analysis)
+# Interparish bus stops are full destinations (they carry isochrones); comunal
+# bus stops are a display-only reference layer.
+bus_inter <- tryCatch(
+  sf::st_read(ISO_PATH, layer = "bus_interparroquial", quiet = TRUE) |> sf::st_transform(crs_analysis),
+  error = function(e) { warning("No bus_interparroquial: ", conditionMessage(e)); NULL })
+bus_comunal <- tryCatch(
+  sf::st_read(ISO_PATH, layer = "bus_comunal", quiet = TRUE) |> sf::st_transform(crs_analysis),
+  error = function(e) { warning("No bus_comunal: ", conditionMessage(e)); NULL })
 pob_raw <- sf::st_read(POB_PATH, quiet = TRUE) |> sf::st_transform(crs_analysis) |> sf::st_make_valid()
 pob_pts <- prepare_population(pob_raw)
+
+# Apply display-name overrides consistently across every layer keyed on `nom`,
+# so the coverage tables, markers and isochrones all join correctly.
+isochrones <- apply_renames(isochrones)
+equip      <- apply_renames(equip)
+espai_pts  <- apply_renames(espai_pts)
+bus_inter  <- apply_renames(bus_inter)
 
 # Optional visual layers.
 espai_poly <- NULL
@@ -140,9 +186,12 @@ pop_per_iso <- cbind(
   count_in_polygons(isochrones, pob_pts)
 )
 
+# One row per place. n_entrades can vary across scenarios for the same place
+# (fewer entrances reachable in slower scenarios), so collapse to the max
+# rather than distinct() — otherwise a place appears twice with the same nom.
 destinations <- pop_per_iso |>
-  dplyr::select(nom, us, tipus_desti, n_entrades) |>
-  dplyr::distinct() |>
+  dplyr::group_by(nom, us, tipus_desti) |>
+  dplyr::summarise(n_entrades = max(n_entrades), .groups = "drop") |>
   dplyr::arrange(tipus_desti, us, nom)
 
 dest_info <- destinations |> dplyr::select(nom, us, tipus_desti) |> dplyr::distinct()
@@ -202,10 +251,53 @@ coverage_category <- dplyr::bind_rows(cat_rows) |>
                 infants_0_12, joves, adults, gent_gran, denominator, value, percentatge)
 category_isochrones <- do.call(rbind, cat_geoms)
 
+message("Computing 5-minute access summary (parkings + comunal bus)...")
+# Per destination × scenario: how many parkings (by centroid) and comunal-bus
+# stops fall within that destination's own 5-minute isochrone. Mirrors the
+# per-fitxa access table in the report.
+ap_ctr <- if (!is.null(aparcaments) && nrow(aparcaments) > 0)
+  suppressWarnings(sf::st_centroid(sf::st_geometry(aparcaments))) else NULL
+ap_places <- if (!is.null(aparcaments) && "Places" %in% names(aparcaments))
+  suppressWarnings(as.numeric(as.character(aparcaments$Places))) else NULL
+bc_geom <- if (!is.null(bus_comunal) && nrow(bus_comunal) > 0)
+  sf::st_geometry(bus_comunal) else NULL
+
+old_s2 <- sf::sf_use_s2(FALSE)
+access_rows <- list(); ai <- 1L
+for (nm in sort(unique(isochrones$nom))) {
+  for (sc in SCENARIO_IDS) {
+    sub <- isochrones[isochrones$nom == nm & isochrones$escenari == sc & isochrones$banda_min == 5, ]
+    n_ap <- 0L; places <- 0; n_bus <- 0L
+    if (nrow(sub) > 0) {
+      poly <- sf::st_make_valid(sf::st_union(sf::st_geometry(sub)))
+      if (!is.null(ap_ctr)) {
+        inside <- lengths(sf::st_intersects(ap_ctr, poly)) > 0
+        n_ap <- sum(inside)
+        if (n_ap > 0 && !is.null(ap_places)) places <- sum(ap_places[inside], na.rm = TRUE)
+      }
+      if (!is.null(bc_geom)) n_bus <- sum(lengths(sf::st_intersects(bc_geom, poly)) > 0)
+    }
+    access_rows[[ai]] <- data.frame(
+      key = nm, escenari = sc, aparcaments = as.integer(n_ap),
+      places = round(places), bus_comunal = as.integer(n_bus))
+    ai <- ai + 1L
+  }
+}
+sf::sf_use_s2(old_s2)
+coverage_access <- dplyr::bind_rows(access_rows)
+
+# Notes overridden here (not in constants.R, to leave the report untouched) so
+# the website states that the slope adjustment is now applied to every scenario.
+WEB_NOTES <- c(
+  everyone      = "Velocitat base 5 km/h, ajustada al pendent (funció de Tobler)",
+  older_adults  = "3,5 km/h ajustada al pendent · escales i pendents >15% bloquejats",
+  children_0_12 = "3,7 km/h ajustada al pendent · sense restriccions addicionals"
+)
+
 scenarios <- data.frame(
   id = SCENARIO_IDS,
   label = unname(SCENARIO_LABELS[SCENARIO_IDS]),
-  note = unname(SCENARIO_NOTES[SCENARIO_IDS]),
+  note = unname(WEB_NOTES[SCENARIO_IDS]),
   denominatorLabel = vapply(SCENARIO_IDS, scenario_universe_label, character(1)),
   denominator = vapply(SCENARIO_IDS, scenario_denominator, numeric(1))
 )
@@ -219,7 +311,9 @@ config <- list(
     equipaments = COL_EQUIP,
     espais = COL_ESPAI,
     selected = COL_SELECTED,
-    aparcaments = COL_APARCAMENTS
+    aparcaments = COL_APARCAMENTS,
+    bus = if (exists("COL_BUS_COVERAGE")) COL_BUS_COVERAGE else "#7B2CBF",
+    busComunal = if (exists("COL_BUS_COMUNAL")) COL_BUS_COMUNAL else "#2F80ED"
   ),
   dataVintage = format(Sys.Date(), "%Y"),
   exportedAt = format(Sys.time(), "%Y-%m-%dT%H:%M:%S%z")
@@ -240,6 +334,7 @@ write_json(list(
 ), file.path(DATA_OUT, "population_totals.json"))
 write_json(coverage_destination, file.path(DATA_OUT, "coverage_by_destination.json"))
 write_json(coverage_category, file.path(DATA_OUT, "coverage_by_category.json"))
+write_json(coverage_access, file.path(DATA_OUT, "coverage_access.json"))
 
 message("Writing GeoJSON...")
 write_geojson(isochrones, file.path(LAYERS_OUT, "isochrones.geojson"), simplify = TRUE)
@@ -249,5 +344,7 @@ write_geojson(espai_pts, file.path(LAYERS_OUT, "espais_entrades.geojson"), simpl
 write_geojson(qa_origins, file.path(QA_OUT, "qa_origins.geojson"), simplify = FALSE)
 if (!is.null(espai_poly)) write_geojson(espai_poly, file.path(LAYERS_OUT, "espais_polygons.geojson"), simplify = TRUE)
 if (!is.null(aparcaments)) write_geojson(aparcaments, file.path(LAYERS_OUT, "aparcaments.geojson"), simplify = TRUE)
+if (!is.null(bus_inter)) write_geojson(bus_inter, file.path(LAYERS_OUT, "bus_interparroquial.geojson"), simplify = FALSE)
+if (!is.null(bus_comunal)) write_geojson(bus_comunal, file.path(LAYERS_OUT, "bus_comunal.geojson"), simplify = FALSE)
 
 message("Done: ", DATA_OUT)

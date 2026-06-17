@@ -2,22 +2,25 @@
   {
     "id": "everyone",
     "label": "Tothom",
-    "note": "Xarxa original · velocitat base 5 km/h",
+    "note": "Velocitat base 5 km/h, ajustada al pendent (funció de Tobler)",
     "denominatorLabel": "població total",
-    "denominator": 10490
+    "denominator": 10490,
+    "_row": "everyone"
   },
   {
     "id": "older_adults",
     "label": "Gent gran",
-    "note": "3,5 km/h · escales bloquejades · entrades no accessibles excloses",
+    "note": "3,5 km/h ajustada al pendent · escales i pendents >15% bloquejats",
     "denominatorLabel": "població de 65 anys o més",
-    "denominator": 1914
+    "denominator": 1914,
+    "_row": "older_adults"
   },
   {
     "id": "children_0_12",
     "label": "Infants 0–12 anys",
-    "note": "3,7 km/h · velocitat infantil de referència · sense restriccions addicionals",
+    "note": "3,7 km/h ajustada al pendent · sense restriccions addicionals",
     "denominatorLabel": "infants de 0–12 anys",
-    "denominator": 749
+    "denominator": 749,
+    "_row": "children_0_12"
   }
 ]
