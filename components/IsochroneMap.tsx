@@ -123,20 +123,24 @@ export function IsochroneMap({
       style: {
         version: 8,
         sources: {
+          // CARTO basemaps now return an "API KEY REQUIRED" tile, so both
+          // non-satellite bases use key-free Esri raster services (same host
+          // as the satellite layer).
           light: {
             type: 'raster',
-            tiles: ['https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', 'https://b.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'],
+            tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}'],
             tileSize: 256,
-            attribution: '© OpenStreetMap © CARTO'
+            // Real tiles stop at z16 here; above that Esri serves a "no data"
+            // placeholder, so let MapLibre overzoom the z16 tiles instead.
+            maxzoom: 16,
+            attribution: 'Tiles © Esri — Esri, HERE, Garmin, © OpenStreetMap contributors, and the GIS User Community'
           },
           osm: {
             type: 'raster',
-            tiles: [
-              'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
-              'https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png'
-            ],
+            tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}'],
             tileSize: 256,
-            attribution: '© OpenStreetMap © CARTO'
+            maxzoom: 19,
+            attribution: 'Tiles © Esri — Esri, HERE, Garmin, USGS, © OpenStreetMap contributors, and the GIS User Community'
           },
           satellite: {
             type: 'raster',
