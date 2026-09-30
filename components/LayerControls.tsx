@@ -13,6 +13,8 @@ const layerLabels: Record<keyof MapLayerVisibility, string> = {
   equipaments: 'Equipaments',
   espaisEntrades: 'Entrades espais lliures',
   espaisPolygons: 'Polígons espais lliures',
+  busInterparroquial: 'Bus interparroquial',
+  busComunal: 'Bus comunal',
   aparcaments: 'Aparcaments'
 }
 

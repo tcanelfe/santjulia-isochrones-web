@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { AccessPanel } from '@/components/AccessPanel'
 import { Controls } from '@/components/Controls'
 import { CoveragePanel } from '@/components/CoveragePanel'
 import { ExportPanel } from '@/components/ExportPanel'
@@ -16,7 +17,9 @@ const DEFAULT_VISIBLE_LAYERS: MapLayerVisibility = {
   equipaments: false,
   espaisEntrades: false,
   espaisPolygons: false,
-  aparcaments: false
+  aparcaments: false,
+  busInterparroquial: false,
+  busComunal: false
 }
 
 function activeCoverage(data: WebData, scenario: ScenarioId, category: string, destination: string): CoverageRow[] {
@@ -52,7 +55,7 @@ export default function Page() {
           : ((d.scenarios[0]?.id || 'everyone') as ScenarioId))
 
         const urlDestType = params?.get('destType')
-        if (urlDestType === 'equipament' || urlDestType === 'espai_lliure' || urlDestType === 'TOTS') {
+        if (urlDestType === 'equipament' || urlDestType === 'espai_lliure' || urlDestType === 'bus_interparroquial' || urlDestType === 'TOTS') {
           setDestType(urlDestType)
         }
 
@@ -174,6 +177,14 @@ export default function Page() {
           onDestination={setDestination}
         />
         <CoveragePanel title={coverageTitle} rows={coverageRows} scenario={scenario} />
+        {exportScope === 'destination' && (
+          <AccessPanel
+            rows={data.coverageAccess}
+            scenario={scenario}
+            scenarioLabel={selectedScenario?.label || ''}
+            destination={destination}
+          />
+        )}
         <section className="main-panel">
           <KpiCards rows={coverageRows} bandColors={data.config.bandColors} />
           <div className="map-card">
@@ -186,6 +197,8 @@ export default function Page() {
                 espaisEntrades={data.layers.espaisEntrades}
                 espaisPolygons={data.layers.espaisPolygons}
                 aparcaments={data.layers.aparcaments}
+                busInterparroquial={data.layers.busInterparroquial}
+                busComunal={data.layers.busComunal}
                 scenario={scenario}
                 destination={destination}
                 category={category}

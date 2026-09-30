@@ -1,0 +1,1157 @@
+[
+  {
+    "key": "AR+I",
+    "escenari": "everyone",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 2
+  },
+  {
+    "key": "AR+I",
+    "escenari": "older_adults",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 2
+  },
+  {
+    "key": "AR+I",
+    "escenari": "children_0_12",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Auditori Rocafort",
+    "escenari": "everyone",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Auditori Rocafort",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Auditori Rocafort",
+    "escenari": "children_0_12",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Av. de Rocafort",
+    "escenari": "everyone",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Av. de Rocafort",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 21,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Av. de Rocafort",
+    "escenari": "children_0_12",
+    "aparcaments": 1,
+    "places": 21,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Biblioteca de Sant Julia de Loria",
+    "escenari": "everyone",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Biblioteca de Sant Julia de Loria",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Biblioteca de Sant Julia de Loria",
+    "escenari": "children_0_12",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Cementiri vell de Sant Julia de Loria",
+    "escenari": "everyone",
+    "aparcaments": 4,
+    "places": 418,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Cementiri vell de Sant Julia de Loria",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 17,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Cementiri vell de Sant Julia de Loria",
+    "escenari": "children_0_12",
+    "aparcaments": 1,
+    "places": 17,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Centre Cultural i de Congressos Lauredia",
+    "escenari": "everyone",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Centre Cultural i de Congressos Lauredia",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Centre Cultural i de Congressos Lauredia",
+    "escenari": "children_0_12",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Centre d'Atencio Primaria",
+    "escenari": "everyone",
+    "aparcaments": 4,
+    "places": 776,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Centre d'Atencio Primaria",
+    "escenari": "older_adults",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Centre d'Atencio Primaria",
+    "escenari": "children_0_12",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Centre Esportiu de Sant Julia de Loria",
+    "escenari": "everyone",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 3
+  },
+  {
+    "key": "Centre Esportiu de Sant Julia de Loria",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Centre Esportiu de Sant Julia de Loria",
+    "escenari": "children_0_12",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Centre Major - Centre de dia",
+    "escenari": "everyone",
+    "aparcaments": 4,
+    "places": 776,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Centre Major - Centre de dia",
+    "escenari": "older_adults",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Centre Major - Centre de dia",
+    "escenari": "children_0_12",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Comu de Sant Julia de Loria",
+    "escenari": "everyone",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Comu de Sant Julia de Loria",
+    "escenari": "older_adults",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Comu de Sant Julia de Loria",
+    "escenari": "children_0_12",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Comu vell de Loria",
+    "escenari": "everyone",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Comu vell de Loria",
+    "escenari": "older_adults",
+    "aparcaments": 2,
+    "places": 727,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Comu vell de Loria",
+    "escenari": "children_0_12",
+    "aparcaments": 2,
+    "places": 727,
+    "bus_comunal": 1
+  },
+  {
+    "key": "Correos",
+    "escenari": "everyone",
+    "aparcaments": 4,
+    "places": 776,
+    "bus_comunal": 1
+  },
+  {
+    "key": "Correos",
+    "escenari": "older_adults",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Correos",
+    "escenari": "children_0_12",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Escola Andorrana",
+    "escenari": "everyone",
+    "aparcaments": 2,
+    "places": 727,
+    "bus_comunal": 4
+  },
+  {
+    "key": "Escola Andorrana",
+    "escenari": "older_adults",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Escola Andorrana",
+    "escenari": "children_0_12",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Escola Bressol Laurèdia Xics",
+    "escenari": "everyone",
+    "aparcaments": 4,
+    "places": 776,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Escola Bressol Laurèdia Xics",
+    "escenari": "older_adults",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Escola Bressol Laurèdia Xics",
+    "escenari": "children_0_12",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Escola Francesa",
+    "escenari": "everyone",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Escola Francesa",
+    "escenari": "older_adults",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Escola Francesa",
+    "escenari": "children_0_12",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Espai Laurèdia Jove",
+    "escenari": "everyone",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Espai Laurèdia Jove",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Espai Laurèdia Jove",
+    "escenari": "children_0_12",
+    "aparcaments": 2,
+    "places": 727,
+    "bus_comunal": 1
+  },
+  {
+    "key": "Espai saludable per a la gent gran",
+    "escenari": "everyone",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Espai saludable per a la gent gran",
+    "escenari": "older_adults",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Espai saludable per a la gent gran",
+    "escenari": "children_0_12",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "La Planella",
+    "escenari": "everyone",
+    "aparcaments": 4,
+    "places": 418,
+    "bus_comunal": 0
+  },
+  {
+    "key": "La Planella",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 17,
+    "bus_comunal": 0
+  },
+  {
+    "key": "La Planella",
+    "escenari": "children_0_12",
+    "aparcaments": 1,
+    "places": 17,
+    "bus_comunal": 0
+  },
+  {
+    "key": "La Riberola",
+    "escenari": "everyone",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "La Riberola",
+    "escenari": "older_adults",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "La Riberola",
+    "escenari": "children_0_12",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "La Valireta · Andorra la Vella",
+    "escenari": "everyone",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "La Valireta · Andorra la Vella",
+    "escenari": "older_adults",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "La Valireta · Andorra la Vella",
+    "escenari": "children_0_12",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "La Valireta · Espanya",
+    "escenari": "everyone",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "La Valireta · Espanya",
+    "escenari": "older_adults",
+    "aparcaments": 2,
+    "places": 478,
+    "bus_comunal": 0
+  },
+  {
+    "key": "La Valireta · Espanya",
+    "escenari": "children_0_12",
+    "aparcaments": 2,
+    "places": 478,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Les Arades",
+    "escenari": "everyone",
+    "aparcaments": 1,
+    "places": 21,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Les Arades",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 21,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Les Arades",
+    "escenari": "children_0_12",
+    "aparcaments": 1,
+    "places": 21,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Ministeri d'educacio",
+    "escenari": "everyone",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Ministeri d'educacio",
+    "escenari": "older_adults",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Ministeri d'educacio",
+    "escenari": "children_0_12",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Oficina de tursime",
+    "escenari": "everyone",
+    "aparcaments": 2,
+    "places": 546,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Oficina de tursime",
+    "escenari": "older_adults",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Oficina de tursime",
+    "escenari": "children_0_12",
+    "aparcaments": 2,
+    "places": 546,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Oficines del Servei de Circulació",
+    "escenari": "everyone",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Oficines del Servei de Circulació",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Oficines del Servei de Circulació",
+    "escenari": "children_0_12",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Parc Infantil Camp de Perot",
+    "escenari": "everyone",
+    "aparcaments": 2,
+    "places": 313,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Parc Infantil Camp de Perot",
+    "escenari": "older_adults",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Parc Infantil Camp de Perot",
+    "escenari": "children_0_12",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Parc Infantil d'Aixirivall",
+    "escenari": "everyone",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 8
+  },
+  {
+    "key": "Parc Infantil d'Aixirivall",
+    "escenari": "older_adults",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 8
+  },
+  {
+    "key": "Parc Infantil d'Aixirivall",
+    "escenari": "children_0_12",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 8
+  },
+  {
+    "key": "Parc Infantil de Terra Bogada",
+    "escenari": "everyone",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 3
+  },
+  {
+    "key": "Parc Infantil de Terra Bogada",
+    "escenari": "older_adults",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 1
+  },
+  {
+    "key": "Parc Infantil de Terra Bogada",
+    "escenari": "children_0_12",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Parc Infantil del Prat Gran",
+    "escenari": "everyone",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Parc Infantil del Prat Gran",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 100,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Parc Infantil del Prat Gran",
+    "escenari": "children_0_12",
+    "aparcaments": 1,
+    "places": 100,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Parc Prat del Senzill",
+    "escenari": "everyone",
+    "aparcaments": 4,
+    "places": 418,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Parc Prat del Senzill",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 17,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Parc Prat del Senzill",
+    "escenari": "children_0_12",
+    "aparcaments": 1,
+    "places": 17,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Plaça d'Aixirivall",
+    "escenari": "everyone",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 8
+  },
+  {
+    "key": "Plaça d'Aixirivall",
+    "escenari": "older_adults",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 7
+  },
+  {
+    "key": "Plaça d'Aixirivall",
+    "escenari": "children_0_12",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 8
+  },
+  {
+    "key": "Plaça de Calonge Sant Antoni",
+    "escenari": "everyone",
+    "aparcaments": 3,
+    "places": 827,
+    "bus_comunal": 4
+  },
+  {
+    "key": "Plaça de Calonge Sant Antoni",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Plaça de Calonge Sant Antoni",
+    "escenari": "children_0_12",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Plaça de la Germandat",
+    "escenari": "everyone",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Plaça de la Germandat",
+    "escenari": "older_adults",
+    "aparcaments": 2,
+    "places": 727,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Plaça de la Germandat",
+    "escenari": "children_0_12",
+    "aparcaments": 2,
+    "places": 727,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Plaça de Lauredia",
+    "escenari": "everyone",
+    "aparcaments": 2,
+    "places": 546,
+    "bus_comunal": 4
+  },
+  {
+    "key": "Plaça de Lauredia",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 100,
+    "bus_comunal": 3
+  },
+  {
+    "key": "Plaça de Lauredia",
+    "escenari": "children_0_12",
+    "aparcaments": 2,
+    "places": 546,
+    "bus_comunal": 3
+  },
+  {
+    "key": "Plaça de Sant Roc",
+    "escenari": "everyone",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Plaça de Sant Roc",
+    "escenari": "older_adults",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Plaça de Sant Roc",
+    "escenari": "children_0_12",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Plaça del Mallador",
+    "escenari": "everyone",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Plaça del Mallador",
+    "escenari": "older_adults",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Plaça del Mallador",
+    "escenari": "children_0_12",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Plaça del Moli",
+    "escenari": "everyone",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Plaça del Moli",
+    "escenari": "older_adults",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Plaça del Moli",
+    "escenari": "children_0_12",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Plaça del Sola",
+    "escenari": "everyone",
+    "aparcaments": 5,
+    "places": 864,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Plaça del Sola",
+    "escenari": "older_adults",
+    "aparcaments": 4,
+    "places": 418,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Plaça del Sola",
+    "escenari": "children_0_12",
+    "aparcaments": 4,
+    "places": 418,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Plaça del Tossal",
+    "escenari": "everyone",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 3
+  },
+  {
+    "key": "Plaça del Tossal",
+    "escenari": "older_adults",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Plaça del Tossal",
+    "escenari": "children_0_12",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Plaça Francesc Cairat",
+    "escenari": "everyone",
+    "aparcaments": 5,
+    "places": 864,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Plaça Francesc Cairat",
+    "escenari": "older_adults",
+    "aparcaments": 3,
+    "places": 330,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Plaça Francesc Cairat",
+    "escenari": "children_0_12",
+    "aparcaments": 3,
+    "places": 330,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Plaça Major",
+    "escenari": "everyone",
+    "aparcaments": 4,
+    "places": 776,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Plaça Major",
+    "escenari": "older_adults",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Plaça Major",
+    "escenari": "children_0_12",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Plaça Rocacorba",
+    "escenari": "everyone",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 3
+  },
+  {
+    "key": "Plaça Rocacorba",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 21,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Plaça Rocacorba",
+    "escenari": "children_0_12",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Pont de Fontaneda · Andorra la Vella",
+    "escenari": "everyone",
+    "aparcaments": 5,
+    "places": 864,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Pont de Fontaneda · Andorra la Vella",
+    "escenari": "older_adults",
+    "aparcaments": 3,
+    "places": 330,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Pont de Fontaneda · Andorra la Vella",
+    "escenari": "children_0_12",
+    "aparcaments": 3,
+    "places": 330,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Pont de Fontaneda · Espanya",
+    "escenari": "everyone",
+    "aparcaments": 4,
+    "places": 418,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Pont de Fontaneda · Espanya",
+    "escenari": "older_adults",
+    "aparcaments": 4,
+    "places": 418,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Pont de Fontaneda · Espanya",
+    "escenari": "children_0_12",
+    "aparcaments": 4,
+    "places": 418,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Prat Gran · Andorra la Vella",
+    "escenari": "everyone",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Prat Gran · Andorra la Vella",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 100,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Prat Gran · Andorra la Vella",
+    "escenari": "children_0_12",
+    "aparcaments": 2,
+    "places": 121,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Prat Gran · Espanya",
+    "escenari": "everyone",
+    "aparcaments": 2,
+    "places": 546,
+    "bus_comunal": 3
+  },
+  {
+    "key": "Prat Gran · Espanya",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 100,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Prat Gran · Espanya",
+    "escenari": "children_0_12",
+    "aparcaments": 1,
+    "places": 100,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Riu d'Auvinyà · Andorra la Vella",
+    "escenari": "everyone",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Riu d'Auvinyà · Andorra la Vella",
+    "escenari": "older_adults",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Riu d'Auvinyà · Andorra la Vella",
+    "escenari": "children_0_12",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Riu d'Auvinyà · Espanya",
+    "escenari": "everyone",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Riu d'Auvinyà · Espanya",
+    "escenari": "older_adults",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Riu d'Auvinyà · Espanya",
+    "escenari": "children_0_12",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Rotonda d'Aixovall",
+    "escenari": "everyone",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Rotonda d'Aixovall",
+    "escenari": "older_adults",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Rotonda d'Aixovall",
+    "escenari": "children_0_12",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Sala de Vetlles",
+    "escenari": "everyone",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 1
+  },
+  {
+    "key": "Sala de Vetlles",
+    "escenari": "older_adults",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Sala de Vetlles",
+    "escenari": "children_0_12",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Sant Bartomeu",
+    "escenari": "everyone",
+    "aparcaments": 2,
+    "places": 546,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Sant Bartomeu",
+    "escenari": "older_adults",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Sant Bartomeu",
+    "escenari": "children_0_12",
+    "aparcaments": 0,
+    "places": 0,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Sant Julia i Sant Germa de Loria",
+    "escenari": "everyone",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 1
+  },
+  {
+    "key": "Sant Julia i Sant Germa de Loria",
+    "escenari": "older_adults",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Sant Julia i Sant Germa de Loria",
+    "escenari": "children_0_12",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Universitat Carlemany",
+    "escenari": "everyone",
+    "aparcaments": 3,
+    "places": 827,
+    "bus_comunal": 3
+  },
+  {
+    "key": "Universitat Carlemany",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Universitat Carlemany",
+    "escenari": "children_0_12",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Universitat d'Andorra",
+    "escenari": "everyone",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 2
+  },
+  {
+    "key": "Universitat d'Andorra",
+    "escenari": "older_adults",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Universitat d'Andorra",
+    "escenari": "children_0_12",
+    "aparcaments": 1,
+    "places": 446,
+    "bus_comunal": 1
+  },
+  {
+    "key": "Universitat Europea",
+    "escenari": "everyone",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Universitat Europea",
+    "escenari": "older_adults",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  },
+  {
+    "key": "Universitat Europea",
+    "escenari": "children_0_12",
+    "aparcaments": 3,
+    "places": 759,
+    "bus_comunal": 0
+  }
+]

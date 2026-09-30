@@ -10,6 +10,8 @@ export type MapLayerVisibility = {
   espaisEntrades: boolean
   espaisPolygons: boolean
   aparcaments: boolean
+  busInterparroquial: boolean
+  busComunal: boolean
 }
 
 export type Scenario = {
@@ -20,11 +22,23 @@ export type Scenario = {
   denominator: number
 }
 
+export type DestType = 'equipament' | 'espai_lliure' | 'bus_interparroquial'
+
 export type Destination = {
   nom: string
   us: string
-  tipus_desti: 'equipament' | 'espai_lliure'
+  tipus_desti: DestType
   n_entrades?: number
+}
+
+// 5-minute access summary for a destination under a given scenario: nearby
+// parkings (and their total places) and comunal-bus stops.
+export type AccessRow = {
+  key: string
+  escenari: ScenarioId
+  aparcaments: number
+  places: number
+  bus_comunal: number
 }
 
 export type CoverageRow = {
@@ -56,6 +70,8 @@ export type WebConfig = {
     espais: string
     selected: string
     aparcaments: string
+    bus: string
+    busComunal: string
   }
   dataVintage?: string
   exportedAt?: string
@@ -84,6 +100,7 @@ export type WebData = {
   destinations: Destination[]
   coverageDestination: CoverageRow[]
   coverageCategory: CoverageRow[]
+  coverageAccess: AccessRow[]
   populationTotals: PopulationTotals
   exportManifest: ExportManifestItem[]
   layers: {
@@ -93,5 +110,7 @@ export type WebData = {
     espaisEntrades: FeatureCollection
     espaisPolygons: FeatureCollection | null
     aparcaments: FeatureCollection | null
+    busInterparroquial: FeatureCollection | null
+    busComunal: FeatureCollection | null
   }
 }

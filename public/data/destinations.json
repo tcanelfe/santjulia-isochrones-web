@@ -1,5 +1,83 @@
 [
   {
+    "nom": "Av. de Rocafort",
+    "us": "Parades bus interparroquial",
+    "tipus_desti": "bus_interparroquial",
+    "n_entrades": 1
+  },
+  {
+    "nom": "La Planella",
+    "us": "Parades bus interparroquial",
+    "tipus_desti": "bus_interparroquial",
+    "n_entrades": 1
+  },
+  {
+    "nom": "La Riberola",
+    "us": "Parades bus interparroquial",
+    "tipus_desti": "bus_interparroquial",
+    "n_entrades": 1
+  },
+  {
+    "nom": "La Valireta · Andorra la Vella",
+    "us": "Parades bus interparroquial",
+    "tipus_desti": "bus_interparroquial",
+    "n_entrades": 1
+  },
+  {
+    "nom": "La Valireta · Espanya",
+    "us": "Parades bus interparroquial",
+    "tipus_desti": "bus_interparroquial",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Les Arades",
+    "us": "Parades bus interparroquial",
+    "tipus_desti": "bus_interparroquial",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Pont de Fontaneda · Andorra la Vella",
+    "us": "Parades bus interparroquial",
+    "tipus_desti": "bus_interparroquial",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Pont de Fontaneda · Espanya",
+    "us": "Parades bus interparroquial",
+    "tipus_desti": "bus_interparroquial",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Prat Gran · Andorra la Vella",
+    "us": "Parades bus interparroquial",
+    "tipus_desti": "bus_interparroquial",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Prat Gran · Espanya",
+    "us": "Parades bus interparroquial",
+    "tipus_desti": "bus_interparroquial",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Riu d'Auvinyà · Andorra la Vella",
+    "us": "Parades bus interparroquial",
+    "tipus_desti": "bus_interparroquial",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Riu d'Auvinyà · Espanya",
+    "us": "Parades bus interparroquial",
+    "tipus_desti": "bus_interparroquial",
+    "n_entrades": 1
+  },
+  {
+    "nom": "Rotonda d'Aixovall",
+    "us": "Parades bus interparroquial",
+    "tipus_desti": "bus_interparroquial",
+    "n_entrades": 1
+  },
+  {
     "nom": "Espai saludable per a la gent gran",
     "us": "Area d'esports",
     "tipus_desti": "equipament",
@@ -36,13 +114,13 @@
     "n_entrades": 1
   },
   {
-    "nom": "Local de Corrreu i La Poste",
+    "nom": "Correos",
     "us": "Correus",
     "tipus_desti": "equipament",
     "n_entrades": 1
   },
   {
-    "nom": "Escola Andorra de Loria",
+    "nom": "Escola Andorrana",
     "us": "Escola",
     "tipus_desti": "equipament",
     "n_entrades": 2
@@ -144,7 +222,7 @@
     "n_entrades": 1
   },
   {
-    "nom": "Sala de vetlles",
+    "nom": "Sala de Vetlles",
     "us": "Vetlles",
     "tipus_desti": "equipament",
     "n_entrades": 1

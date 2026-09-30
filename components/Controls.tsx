@@ -47,6 +47,7 @@ export function Controls({
           <option value="TOTS">Tots</option>
           <option value="equipament">Equipaments</option>
           <option value="espai_lliure">Espais lliures</option>
+          <option value="bus_interparroquial">Parades de bus interparroquial</option>
         </select>
       </div>
       <div className="control">
